@@ -8,7 +8,6 @@ Designed to be PSR compliant, very small and lightweight, but still have enough 
 
 Nofuzz is built around a Routing engine and the Controller principle. Built in are features such as Caches, multiple Database drivers and a myriad of other often needed features in API's (like JWT).
 
-Latest release: v0.5.1
 ---
 ## Installing
 ```txt
