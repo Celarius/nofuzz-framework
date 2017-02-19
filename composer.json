@@ -1,5 +1,5 @@
 {
-  "name": "nofuzz/nofuzz",
+  "name": "nofuzz/framework",
   "description": "A PHP nano framework for REST API's",
   "keywords": [
     "Framework",
