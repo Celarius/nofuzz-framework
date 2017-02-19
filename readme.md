@@ -12,7 +12,7 @@ Latest release: v0.5.1
 ---
 ## Installing
 ```txt
-$ composer require nofuzz/nofuzz
+$ composer require nofuzz/framework
 ```
 
 ---
