@@ -8,7 +8,7 @@
     "MicroService"
   ],
   "homepage": "http://nofuzz.celarius.com",
-  "type": "library",
+  "type": "framework",
   "license": "MIT",
   "authors": [
     {
