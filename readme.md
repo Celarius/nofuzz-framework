@@ -1,6 +1,6 @@
 # A PHP nano framework for REST API's
 
-[![License](https://poser.pugx.org/nofuzz/nofuzz/license)](https://packagist.org/packages/nofuzz/nofuzz)
+[![License](https://poser.pugx.org/nofuzz/framework/license)](https://packagist.org/packages/nofuzz/framework)
 
 Nofuzz is a nano-framework that enables rapid development of REST API applications in PHP.
 
