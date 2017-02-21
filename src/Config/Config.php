@@ -66,6 +66,32 @@ class Config implements \Nofuzz\Config\ConfigInterface
   }
 
   /**
+   * Load & Merge Configuration file to existing config
+   *
+   * @param  string $filename
+   * @return self
+   */
+  public function loadAndMerge(string $filename): \Nofuzz\Config\Config
+  {
+    # Attempt to load config file and merge it - Current Directory (config.json)
+    if ( file_exists($filename) ) {
+      # Set filename
+      $this->filename = $filename;
+      # Load the config
+      $configArray = json_decode( file_get_contents($filename), true);
+      if ($configArray) {
+        // $configArray = $this->array_change_key_case_recursive($configArray); // Lowercase the keys
+        # Merge the Config with existing config
+        $this->confValues = array_replace_recursive($this->confValues, $configArray);
+      } else {
+        throw new \RunTimeException('Invalid JSON file "'.$filename.'"');
+      }
+    }
+
+    return $this;
+  }
+
+  /**
    * Save Configuration file
    *
    * @param  string $filename       If null the last used filename is used

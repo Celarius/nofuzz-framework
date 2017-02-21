@@ -22,6 +22,14 @@ interface ConfigInterface
   function load(string $filename): \Nofuzz\Config\Config;
 
   /**
+   * Load & Merge Configuration file to existing config
+   *
+   * @param  string $filename
+   * @return self
+   */
+  function loadAndMerge(string $filename): \Nofuzz\Config\Config;
+
+  /**
    * Save Configuration file
    *
    * @param  string $filename
