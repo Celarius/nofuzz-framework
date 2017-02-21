@@ -53,7 +53,7 @@ abstract class BaseDao implements \Nofuzz\Database\BaseDaoInterface
    */
   public function beginTransaction()
   {
-    if ($this->getConnection()->inTransaction()) {
+    if (!$this->getConnection()->inTransaction()) {
       return $this->getConnection()->beginTransaction();
     }
     return false;
