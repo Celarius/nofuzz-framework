@@ -11,6 +11,6 @@ Status: In Dev
 * Added Encryption/Decryption [Cipher Helper](src/Helpers/Cipher.php) helper
 * Added Message Digest/Hashing [Hash Helper](src/Helpers/Hash.php) helper
 * Added [UUID Helper](src/Helpers/UUID.php) helper
-* Added `Config->loadAndMerge()` method
+* Added `Config->loadAndMerge()` method to `\Nofuzz\Config\Client` class
 
 

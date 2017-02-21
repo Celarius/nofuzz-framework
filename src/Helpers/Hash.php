@@ -24,7 +24,8 @@ class Hash // implements \Nofuzz\Helpers\HashInterface
    */
   public static function generate(string $data, string $method='SHA256'): string
   {
-    $hash = string openssl_digest($data,$method);
+    $hash = '';
+    $hash = openssl_digest($data,$method);
 
     return $hash;
   }
@@ -39,7 +40,7 @@ class Hash // implements \Nofuzz\Helpers\HashInterface
    */
   public static function check(string $data, string $hash, string $method='SHA256'): bool
   {
-    $hash_compare = string openssl_digest($data,$method);
+    $hash_compare = openssl_digest($data,$method);
 
     return (strcmp($hash, $hash_compare) === 0);
   }
