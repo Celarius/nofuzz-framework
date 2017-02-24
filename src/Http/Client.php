@@ -6,7 +6,7 @@
  *
  * Example:
  *
- *    if ($httpClient->get('http://<domain>/<path>')) {
+ *    if ($httpClient->get('http://<domain>/<path>;')) {
  *      $responseBody = $httpClient->getResponse()->getBody()->getContents();
  *    } else {
  *      // error
@@ -21,6 +21,8 @@ namespace Nofuzz\Http;
 class Client // extends ... implements ...
 {
   protected $guzzleClient = null;
+  protected $cookieJar = null;
+
   protected $timeoutConnect = 3;
   protected $timeoutReceive = 10;
   protected $httpRequest = null;
@@ -66,6 +68,8 @@ class Client // extends ... implements ...
       );
 
       $this->guzzleClient = new \GuzzleHttp\Client($opts);
+      $this->cookieJar = new \GuzzleHttp\Cookie\CookieJar();
+
     }
 
     return $this->guzzleClient;
@@ -117,13 +121,24 @@ class Client // extends ... implements ...
         $this->timeStart = microtime(true);
 
         # Merge in the timing part - unless the user has this also
-        $headers = array_merge(
-          [
-            'on_headers' => function (\GuzzleHttp\Psr7\Response $response) {
-              $this->timeHeaders = microtime(true)-$this->timeStart;
-            }
-          ]
-        );
+        $headers = [
+                     'on_headers' => function (\GuzzleHttp\Psr7\Response $response) {
+                       $this->timeHeaders = microtime(true)-$this->timeStart;
+                     },
+                     'headers' => array_merge([
+                       'Accept'          => '*/*',
+                       'Accept-Encoding' => 'gzip, deflate'
+                     ],$headers),
+                     'synchronous'       => true,
+                     'cookies'           => $this->cookieJar,
+                     'debug'             => false
+                     // 'on_headers' => function ( \Psr\Http\Message\ResponseInterface $response ) {
+                     //   error_log( print_r($response->getHeaders(), true) );
+                     // },
+                     // 'on_stats' => function ( \GuzzleHttp\TransferStats $status ) {
+                     //   error_log( $status->getTransferTime().' - '.print_r($status->getHandlerStats(),true) );
+                     // }
+                   ];
 
         # Send the Request
         $this->httpResponse = $this->guzzleClient->send($request, $headers);
@@ -185,7 +200,7 @@ class Client // extends ... implements ...
           unset($_sec);
         }
 
-      } catch (Exception $e) {
+      } catch (\Exception $e) {
         # Set error String
         $this->lastErrorStr = $e->getMessage();
 
