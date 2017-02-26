@@ -4,44 +4,10 @@
  *
  * @package     Nofuzz
 */
-
 ################################################################################################################################
 
 namespace Nofuzz\Database;
 /*
-MYSQL:
-  // host=localhost
-  // port=3306
-  // dbname=<path>\\<filename.fdb>
-  $connection = new \PDO('mysql:host=localhost;port=3306;dbname=test', $user, $pass,
-    array(
-      \PDO::ATTR_PERSISTENT => true
-      \PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-      // \PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING,
-      \PDO::ATTR_AUTOCOMMIT => FALSE,
-      \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"           // Set UTF8 as charset
-    )
-  );
-
-
-FIREBIRD:
-  // host=localhost
-  // port=3050
-  // dbname=<path>\\<filename.fdb>
-  $connection = new PDO("firebird:dbname=<hostname>/<port>:C:\\path\\filename.fdb", $user, $pass,
-    array(
-      PDO::ATTR_PERSISTENT => true
-      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-      PDO::ATTR_AUTOCOMMIT => false
-    )
-  );
-
-  setAttribute(PDO::FB_ATTR_TIMESTAMP_FORMAT, '%s')
-  setAttribute(PDO::FB_ATTR_DATE_FORMAT, '%s' )
-  setAttribute(PDO::FB_ATTR_TIME_FORMAT, '%S' )
-  setAttribute(PDO::FB_ATTR_TIMESTAMP_FORMAT, '%s' )
-
-
 POSTGRESQL:
   // host=localhost
   // port=5432
@@ -53,8 +19,6 @@ POSTGRESQL:
       PDO::ATTR_AUTOCOMMIT => false
     )
   );
-
-
 */
 ################################################################################################################################
 
@@ -63,7 +27,8 @@ abstract class PdoConnection extends \PDO implements \Nofuzz\Database\PdoConnect
   protected $name = ''; // Connection name
   protected $type = ''; // Connection Type
   protected $driver = ''; // Connection Driver ('MySql','Firebird','Sqlite'...)
-  protected $schema = ''; // Connection Schema
+
+  protected $schema = '';
   protected $host = '';
   protected $port = 0;
   protected $username = '';
@@ -81,20 +46,50 @@ abstract class PdoConnection extends \PDO implements \Nofuzz\Database\PdoConnect
   /**
    * Constructor
    *
-   * @param string $dbDriver    Driver name. Ex. 'firebird', 'mysql', 'pgsql', 'odbc', 'sqlite'
-   * @param string $dbHost      Hostname/IP address
-   * @param int    $dbPort      Port number. 0=Auto
-   * @param string $dbSchema    Database file name / schema
-   * @param string $dbUser      Username
-   * @param string $dbPass      Password
-   * @param array  $dbCharset   Charset. Optional. Defaults to UTF-8
-   * @param array  $dbOpts      PDO Options. Optional
+   * @param string $connectionName [description]
+   * @param array  $params         [description]
    */
-  public function __construct(string $dbDriver, string $dbHost, int $dbPort, string $dbSchema, string $dbUser='', string $dbPass='', string $dbCharset='UTF8',array $dbOpts=array())
+  public function __construct(string $connectionName, array $params=[])
   {
+    # Extract the needed parameters
+    $this->setName($connectionName);
+    $this->setType($params['type'] ?? '');
+    $this->setDriver($params['driver'] ?? '');
+    $this->host = ($params['host'] ?? '');
+    $this->port = ($params['port'] ?? '');
+    $this->setSchema($params['schema'] ?? '');
+    $this->setUsername($params['username'] ?? '');
+    $this->setPassword($params['password'] ?? '');
+    $this->setCharset($params['charset'] ?? '');
+
+    # Get the PDO parameters from params
+    $pdoParams = $params['options'] ?? [];
+
+    $pdoOptions = [];
+    # Convert the PDO params into PDO constants
+    if ( count($pdoParams)>0 ) {
+      foreach ($pdoParams as $p)
+      {
+        $pdoOption = strtoupper(key($p));
+        $pdoValue = trim(reset($p));
+
+        # Convert to PDO constants
+        $k = constant('\PDO::'.$pdoOption); // PDO Option
+        if ( !is_numeric($pdoValue) && !empty($pdoValue) ) {
+          $v = @constant('\PDO::'.$pdoValue);  // PDO constant
+        } else if (!empty($pdoValue)) {
+          $v = $pdoValue; // Its a string
+        } else {
+          $v = 0; // false
+        }
+        # Set the Option
+        $pdoOptions[ $k ] = $v;
+      }
+    }
+
     # Default PDO options for all drivers if none given
-    if (count($dbOpts)==0) {
-      $dbOpts =
+    if (count($pdoOptions)==0) {
+      $pdoOptions =
         array(
           \PDO::ATTR_PERSISTENT => TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
@@ -102,17 +97,10 @@ abstract class PdoConnection extends \PDO implements \Nofuzz\Database\PdoConnect
         );
     }
 
-    # Set properties
-    $this->driver = $dbDriver;
-    $this->host = $dbHost;
-    $this->port = $dbPort;
-    $this->setSchema($dbSchema);
-    $this->setUsername($dbUser);
-    $this->setPassword($dbPass);
-    $this->setCharset($dbCharset);
-    $this->setOptions($dbOpts);
+    # Set PDO Options
+    $this->setOptions($pdoOptions);
 
-    # Parent Constructor
+    # Parent Constructor (PDO Class)
     parent::__construct($this->getDsn(),$this->getUsername(),$this->getPassword(),$this->getOptions());
 
     # Retreive the DB Engine Version (if supported)
@@ -196,16 +184,6 @@ abstract class PdoConnection extends \PDO implements \Nofuzz\Database\PdoConnect
   }
 
   /**
-   * Get the Driver
-   *
-   * @return string
-   */
-  public function getDriver(): string
-  {
-    return $this->driver;
-  }
-
-  /**
    * Get the Type
    *
    * @return string
@@ -213,6 +191,16 @@ abstract class PdoConnection extends \PDO implements \Nofuzz\Database\PdoConnect
   public function getType(): string
   {
     return $this->type;
+  }
+
+  /**
+   * Get the Driver
+   *
+   * @return string
+   */
+  public function getDriver(): string
+  {
+    return $this->driver;
   }
 
   /**
@@ -297,23 +285,10 @@ abstract class PdoConnection extends \PDO implements \Nofuzz\Database\PdoConnect
   }
 
   /**
-   * Set Type
-   *
-   * @param   string $type
-   * @return  delf
-   */
-  public function setType(string $type)
-  {
-    $this->type = $type;
-
-    return $this;
-  }
-
-  /**
    * Set Connection Name
    *
    * @param   string $name
-   * @return  delf
+   * @return  self
    */
   public function setName(string $name)
   {
@@ -323,10 +298,36 @@ abstract class PdoConnection extends \PDO implements \Nofuzz\Database\PdoConnect
   }
 
   /**
+   * Set Type
+   *
+   * @param   string $type
+   * @return  self
+   */
+  public function setType(string $type)
+  {
+    $this->type = $type;
+
+    return $this;
+  }
+
+  /**
+   * Set Driver
+   *
+   * @param   string $driver
+   * @return  self
+   */
+  public function setDriver(string $driver)
+  {
+    $this->driver = $driver;
+
+    return $this;
+  }
+
+  /**
    * Set Schema
    *
    * @param   string $schema
-   * @return  delf
+   * @return  self
    */
   public function setSchema(string $schema)
   {

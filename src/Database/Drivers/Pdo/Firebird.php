@@ -3,10 +3,22 @@
  * Firebird Database Connection (extends PDO)
  *
  * @package     NOFUZZ
- * @copyright   Copyright (c) 2016, Winwap Technologies
- * @author      Kim Sandell <sandell@celarius.com>
 */
 ################################################################################################################################
+/*
+FIREBIRD:
+  $connection = new PDO("firebird:dbname=<hostname>/<port>:C:\\path\\filename.fdb", $user, $pass,
+    array(
+      PDO::ATTR_PERSISTENT => true
+      PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+      PDO::ATTR_AUTOCOMMIT => false
+    )
+  );
+  setAttribute(PDO::FB_ATTR_TIMESTAMP_FORMAT, '%s')
+  setAttribute(PDO::FB_ATTR_DATE_FORMAT, '%s' )
+  setAttribute(PDO::FB_ATTR_TIME_FORMAT, '%S' )
+  setAttribute(PDO::FB_ATTR_TIMESTAMP_FORMAT, '%s' )
+*/
 
 namespace Nofuzz\Database\Drivers\Pdo;
 
@@ -15,28 +27,23 @@ class Firebird extends \Nofuzz\Database\PdoConnection
   /**
    * Constructor
    *
-   * @param string $dbHost    [description]
-   * @param int    $dbPort    [description]
-   * @param string $dbName    [description]
-   * @param string $dbUser    [description]
-   * @param string $dbPass    [description]
-   * @param string $dbCharset [description]
-   * @param array  $dbOpts    [description]
+   * @param string $connectionName [description]
+   * @param array  $params         [description]
    */
-  public function __construct(string $dbHost, int $dbPort, string $dbName, string $dbUser='', string $dbPass='', string $dbCharset='UTF8', array $dbOpts=array())
+  public function __construct(string $connectionName, array $params=[])
   {
-    # Firebird options
-    if (count($dbOpts)==0) {
-      $dbOpts =
-        array(
+    # Firebird default PDO options
+    if (count($params['options'] ?? [])==0) {
+      $params['options'] = [
           \PDO::ATTR_PERSISTENT => TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
           // \PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING,
           \PDO::ATTR_AUTOCOMMIT => FALSE
-        );
+        ];
     }
-    # Utilize Parent Constructor - \Nofuzz\Database\Connection
-    parent::__construct('firebird',$dbHost,$dbPort,$dbName,$dbUser,$dbPass,$dbCharset,$dbOpts);
+
+    # Parent Constructor (\Nofuzz\Database\PdoConnection)
+    parent::__construct($connectionName,$params);
   }
 
   /**
@@ -48,7 +55,7 @@ class Firebird extends \Nofuzz\Database\PdoConnection
   {
     # Build the DSN
     $_dsn = $this->getDriver().':'.
-            'dbname='.$this->GetHost().':'.($this->GetPort()!=0 ? ':'.$this->GetPort().':' : '' ).$this->GetName().';'.
+            'dbname='.$this->GetHost().':'.($this->GetPort()!=0 ? ':'.$this->GetPort().':' : '' ).$this->GetSchema().';'.
             'charset='.$this->GetCharset();
     # Set it
     $this->setDsn($_dsn);

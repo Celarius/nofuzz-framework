@@ -5,6 +5,17 @@
  * @package     NOFUZZ
 */
 ################################################################################################################################
+/*
+MYSQL:
+  $connection = new \PDO('mysql:host=localhost;port=3306;dbname=test', $user, $pass,
+    array(
+      \PDO::ATTR_PERSISTENT => true
+      \PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+      \PDO::ATTR_AUTOCOMMIT => FALSE,
+      \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"           // Set UTF8 as charset
+    )
+  );
+*/
 
 namespace Nofuzz\Database\Drivers\Pdo;
 
@@ -13,31 +24,27 @@ class MySql extends \Nofuzz\Database\PdoConnection
   /**
    * Constructor
    *
-   * @param string $dbHost    [description]
-   * @param int    $dbPort    [description]
-   * @param string $dbName    [description]
-   * @param string $dbUser    [description]
-   * @param string $dbPass    [description]
-   * @param string $dbCharset [description]
-   * @param array  $dbOpts    [description]
+   * @param string $connectionName [description]
+   * @param array  $params         [description]
    */
-  public function __construct(string $dbHost, int $dbPort, string $dbName, string $dbUser='', string $dbPass='', string $dbCharset='UTF8', array $dbOpts=array())
+  public function __construct(string $connectionName, array $params=[])
   {
-    # MySql Default options
-    if (count($dbOpts)==0) {
-      $dbOpts =
-        array(
+    # MySQL default PDO options
+    if (count($params['options'] ?? [])==0) {
+      $params['options'] = [
           \PDO::ATTR_PERSISTENT => TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+          // \PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING,
           \PDO::ATTR_AUTOCOMMIT => FALSE
-        );
+        ];
     }
-    # Parent Constructor - \Nofuzz\Database\Connection
-    parent::__construct('mysql',$dbHost,$dbPort,$dbName,$dbUser,$dbPass,$dbCharset,$dbOpts);
+
+    # Parent Constructor (\Nofuzz\Database\PdoConnection)
+    parent::__construct($connectionName,$params);
 
     # Set the Default Database so we do not have to add $schema to SQL statements
     if ($this->beginTransaction()) {
-      if ($sth = $this->query('USE '.$dbName)) {
+      if ($sth = $this->query('USE '.$this->getSchema())) {
         $sth->closeCursor();
       }
       $this->commit();
@@ -54,7 +61,7 @@ class MySql extends \Nofuzz\Database\PdoConnection
     # Build the DSN
     $_dsn = $this->getDriver().':'.
             'host='.$this->getHost().($this->getPort()!=0 ? ';port='.$this->getPort() : '' ).
-            ';dbname='.$this->getName().
+            ';dbname='.$this->getSchema().
             ';charset='.$this->getCharset();
     # Set it
     $this->setDsn($_dsn);

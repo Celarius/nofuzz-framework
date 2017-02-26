@@ -124,47 +124,19 @@ class ConnectionManager implements \Nofuzz\Database\ConnectionManagerInterface
    */
   protected function createConnection(string $connectionName)
   {
+    # Get the connection form the connections array
     $connection = $this->connections[strtolower($connectionName)] ?? null;
 
     if (is_null($connection)) {
-
-      # Get configuration
+      # Get connection configuration
       $connConf = config()->get('connections.'.$connectionName);
 
       # Type="PDO"
       if ( strcasecmp($connConf['type'] ?? '','PDO')==0 ) {
         $className = '\\Nofuzz\\Database\\Drivers\\'.ucfirst($connConf['type']).'\\'.ucfirst($connConf['driver']) ;
 
-        # Convert the PDO constants in the Opts to real values
-        $opts = array();
-        if ( count($connConf)>0 ) {
-
-
-          foreach ($connConf['options'] as $pdoOptions)
-          {
-            $pdoValue = trim(reset($pdoOptions));
-            $pdoOption = strtoupper(key($pdoOptions));
-
-            # Convert data to PDO constants
-            $k = constant('\PDO::'.$pdoOption); // PDO Option
-            if ( !is_numeric($pdoValue) && !empty($pdoValue) ) {
-              $v = @constant('\PDO::'.$pdoValue);  // PDO constant
-            } else if (!empty($pdoValue)) {
-              $v = $pdoValue; // Its a string
-            } else {
-              $v = 0; // false
-            }
-            # Set the Option
-            $opts[ $k ] = $v;
-          }
-
-          # Create the Connection
-          $connection = new $className($connConf['host'],$connConf['port'],$connConf['schema'],$connConf['username'],$connConf['password'],$connConf['charset'],$opts);
-          if ($connection) {
-            $connection->setName($connectionName);
-            $connection->setType($connConf['type']);
-          }
-        }
+        # Create the Connection (PdoConnection)
+        $connection = new $className($connectionName, $connConf);
       }
     }
 
