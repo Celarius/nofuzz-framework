@@ -316,17 +316,23 @@ class Application
           $handlerClass = $arr[0];
           $handlerMethod = ($arr[1] ?? 'handle');
 
-          # Create Class
-          $routeHandler = new $handlerClass( $routeInfo['args'] );
-          if (method_exists($routeHandler,'initialize') && method_exists($routeHandler,$handlerMethod)) {
-            # Initialize
-            $routeHandler->initialize($routeInfo['args']);
+          # Check existance of handler class
+          if (class_exists($handlerClass))
+          {
+            # Create the class
+            $routeHandler = new $handlerClass( $routeInfo['args'] );
 
-            # Run handler
-            $routeResult = $routeHandler->$handlerMethod($routeInfo['args']);
-          } else {
-            $routeResult = false;
+            # Check method existance
+            if ($routeHandler && method_exists($routeHandler,'initialize') && method_exists($routeHandler,$handlerMethod))
+            {
+              # Initialize
+              $routeHandler->initialize($routeInfo['args']);
+
+              # Run handler
+              $routeResult = $routeHandler->$handlerMethod($routeInfo['args']);
+            }
           }
+
         }
 
         #
