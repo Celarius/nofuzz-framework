@@ -6,8 +6,8 @@
  *
  * Example:
  *
- *    if ($httpClient->get('http://<domain>/<path>;')) {
- *      $responseBody = $httpClient->getResponse()->getBody()->getContents();
+ *    if ($httpClient->get('http://<domain>/<path>;;')) {
+ *      $responseBody = $httpClient->getResponse()->getBody();
  *    } else {
  *      // error
  *    }
@@ -45,7 +45,7 @@ class Client // extends ... implements ...
   public function __construct(array $opts=[])
   {
     $this->guzzleClient = null;
-    $this->opts = $opts;
+    $this->setRequestOptions($opts);
   }
 
   /**
@@ -57,19 +57,8 @@ class Client // extends ... implements ...
   protected function createClient(array $opts=[])
   {
     if ( !$this->guzzleClient ) {
-      $opts = array_merge(
-        [
-          'http_errors' => true,                               // Exceptions on 4xx response codes
-          'connect_timeout' => $this->getTimeoutConnect(),     // Connect Timeout (seconds)
-          'timeout'  => $this->getTimeoutReceive(),            // Receive Timeout (seconds)
-          'verify' => false                                    // Disable SSL verification (handle self generated SSL certs)
-        ]
-        ,$opts
-      );
-
-      $this->guzzleClient = new \GuzzleHttp\Client($opts);
+      $this->guzzleClient = new \GuzzleHttp\Client();
       $this->cookieJar = new \GuzzleHttp\Cookie\CookieJar();
-
     }
 
     return $this->guzzleClient;
@@ -78,16 +67,25 @@ class Client // extends ... implements ...
   /**
    * Creates & returns a GuzzleHttp\Request
    *
-   * @param  string $httpMethod [description]
+   * @param  string $method     [description]
    * @param  string $url        [description]
    * @param  mixed  $body       [description]
    * @param  array  $headers    [description]
    * @return object
    */
-  public function createRequest(string $httpMethod, string $url, $body=null, array $headers=[])
+  public function createRequest(string $method, string $url, $body=null, array $headers=[])
   {
+    # Merge Default Headers with user provided headers
+    $headers = array_merge(
+      [
+         'Accept'          => '*/*',
+         'Accept-Encoding' => 'gzip, deflate'
+      ],
+      $headers
+    );
+
     # Create the httpRequest
-    $this->httpRequest = new \GuzzleHttp\Psr7\Request( $httpMethod, $url, $headers, $body );
+    $this->httpRequest = new \GuzzleHttp\Psr7\Request( $method, $url, $headers, $body );
 
     return $this->httpRequest;
   }
@@ -95,11 +93,11 @@ class Client // extends ... implements ...
   /**
    * Send a GuzzleHttp\Request
    *
-   * @param  \GuzzleHttp\Psr7\Request $request    [description]
-   * @param  array                    $headers    [description]
+   * @param  \GuzzleHttp\Psr7\Request $request
+   * @param  array                    $opts     Guzzle Send Options
    * @return \GuzzleHttp\Response
    */
-  public function sendRequest(\GuzzleHttp\Psr7\Request $request, array $headers=[])
+  public function sendRequest(\GuzzleHttp\Psr7\Request $request, array $opts=[])
   {
     # Set params
     $retriesLeft = $this->retries;
@@ -120,28 +118,36 @@ class Client // extends ... implements ...
         $this->createClient($this->opts);
         $this->timeStart = microtime(true);
 
-        # Merge in the timing part - unless the user has this also
-        $headers = [
-                     'on_headers' => function (\GuzzleHttp\Psr7\Response $response) {
-                       $this->timeHeaders = microtime(true)-$this->timeStart;
-                     },
-                     'headers' => array_merge([
-                       'Accept'          => '*/*',
-                       'Accept-Encoding' => 'gzip, deflate'
-                     ],$headers),
-                     'synchronous'       => true,
-                     'cookies'           => $this->cookieJar,
-                     'debug'             => false
-                     // 'on_headers' => function ( \Psr\Http\Message\ResponseInterface $response ) {
-                     //   error_log( print_r($response->getHeaders(), true) );
-                     // },
-                     // 'on_stats' => function ( \GuzzleHttp\TransferStats $status ) {
-                     //   error_log( $status->getTransferTime().' - '.print_r($status->getHandlerStats(),true) );
-                     // }
-                   ];
+        # Request Options
+        $opts = array_merge(
+          [
+            'http_errors' => true,                               // Exceptions on 4xx response codes
+            'connect_timeout' => $this->getTimeoutConnect(),     // Connect Timeout (seconds)
+            'timeout'  => $this->getTimeoutReceive(),            // Receive Timeout (seconds)
+            'verify' => false                                    // Disable SSL verification (handle self generated SSL certs)
+          ]
+          ,$this->getRequestOptions()
+        );
+
+        $sendOpts = array_merge([
+           'on_headers' => function (\GuzzleHttp\Psr7\Response $response) {
+             $this->timeHeaders = microtime(true)-$this->timeStart;
+           },
+           'synchronous'      => true,
+           'cookies'          => $this->cookieJar,
+           'debug'            => false
+           // 'on_headers' => function ( \Psr\Http\Message\ResponseInterface $response ) {
+           //   error_log( print_r($response->getHeaders(), true) );
+           // },
+           // 'on_stats' => function ( \GuzzleHttp\TransferStats $status ) {
+           //   error_log( $status->getTransferTime().' - '.print_r($status->getHandlerStats(),true) );
+           // }
+         ],$opts
+        );
+
 
         # Send the Request
-        $this->httpResponse = $this->guzzleClient->send($request, $headers);
+        $this->httpResponse = $this->guzzleClient->send($request, $sendOpts);
 
         # Successful response, break the loop
         $retriesLeft = 0;
@@ -426,6 +432,28 @@ class Client // extends ... implements ...
   public function getResponseTime(): float
   {
     return $this->timeResponse;
+  }
+
+  /**
+   * Get Opts
+   *
+   * @return array
+   */
+  public function getRequestOptions(): array
+  {
+    return $this->opts;
+  }
+
+  /**
+   * Set Request Options
+   *
+   * @return self
+   */
+  public function setRequestOptions(array $opts)
+  {
+    $this->opts = $opts;
+
+    return $this;
   }
 
 }
