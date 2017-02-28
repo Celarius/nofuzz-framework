@@ -41,14 +41,6 @@ class MySql extends \Nofuzz\Database\PdoConnection
 
     # Parent Constructor (\Nofuzz\Database\PdoConnection)
     parent::__construct($connectionName,$params);
-
-    # Set the Default Database so we do not have to add $schema to SQL statements
-    if ($this->beginTransaction()) {
-      if ($sth = $this->query('USE '.$this->getSchema())) {
-        $sth->closeCursor();
-      }
-      $this->commit();
-    }
   }
 
   /**
