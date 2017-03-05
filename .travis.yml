@@ -8,12 +8,8 @@ cache:
 
 matrix:
     include:
-        - php: 7.0
-          env: deps=low
-        - php: 7.0
         - php: 7.1
     fast_finish: true
 
 before_script:
-  - if [ "$deps" == "low" ]; then composer update --prefer-dist --prefer-lowest --prefer-stable; fi
-  - if [ "$deps" != "low" ]; then composer install --prefer-dist; fi
+  - composer install --prefer-dist
