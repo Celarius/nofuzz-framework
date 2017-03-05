@@ -3,7 +3,7 @@
  * Encrypted Web Token Class
  *
  * Builds on the concept of JWT's, but provides an encrypted payload so the user
- * who uses it does not see the contents of it. Simpler than JWE tokens.
+ * who uses it does not see the contents of it. Also simpler than JWE tokens.
  *
  * Also does not allow for NONE as algorithm. Should be secure against user-changed
  * algorithm as all signatures are always verified.
