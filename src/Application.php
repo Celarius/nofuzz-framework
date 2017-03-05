@@ -10,7 +10,7 @@ namespace Nofuzz;
 
 class Application
 {
-  const NofuzzVersion = '0.5.1';
+  const NofuzzVersion = '0.5.2';
 
   protected $request = null;
   protected $response = null;
@@ -43,6 +43,12 @@ class Application
    */
   public function __construct( string $basePath, string $routesFilename='' )
   {
+    #
+    # Require the Globals
+    #
+    require __DIR__ . '/Globals.php';
+
+
     # Set basic properties
     $this->basePath = $basePath;
     $this->routeGroups = array();
@@ -110,12 +116,6 @@ class Application
       $routesFilename = $this->getBasePath().'/app/config/routes.json';
     }
     $this->loadRoutes( $routesFilename );
-
-
-    #
-    # Require the Globals
-    #
-    require __DIR__ . '/Globals.php';
   }
 
   /**
