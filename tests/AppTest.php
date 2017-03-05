@@ -2,7 +2,7 @@
 
 namespace Nofuzz;
 
-class AppTest extends \PHPUnit_Framework_TestCase {
+class AppTest extends \PHPUnit_Framework_TestCase
 {
   protected $app;
 
