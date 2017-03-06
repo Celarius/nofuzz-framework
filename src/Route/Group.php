@@ -67,7 +67,7 @@ class Group implements \Nofuzz\Route\GroupInterface
       }
 
       if ( isset($route['path']) && isset($route['handler']) ) {
-        $this->addRoute($methods,$route['path'],$route['handler']);
+        $this->addRoute($methods,'/'.ltrim($route['path'],'/'),$route['handler']);
       }
     }
   }
