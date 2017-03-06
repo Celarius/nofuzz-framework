@@ -115,6 +115,8 @@ _Tip: In the VHOST definition you can SET ENVIRONMENT options with `SetEnv <vari
         Options -MultiViews
     </IfModule>
 
+    DirectoryIndex bootstrap.php
+
     Options -Indexes +FollowSymLinks
     AllowOverride All
     Order allow,deny
