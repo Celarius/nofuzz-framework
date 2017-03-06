@@ -105,34 +105,33 @@ _Tip: In the VHOST definition you can SET ENVIRONMENT options with `SetEnv <vari
   ServerName myserver.domain.com
   ServerAdmin webmaster@domain.com
 
-  DocumentRoot "<path_to_nofuzz_src_public>"
+  DocumentRoot "<path_to_app_src_public>"
 
   ErrorLog "logs/myserver-error.log"
   CustomLog "logs/myserver-access.log" common
 
-  <Directory "<path_to_nofuzz_src_public>">
+  <Directory "<path_to_app_src_public>">
+    <IfModule mod_negotiation.c>
+        Options -MultiViews
+    </IfModule>
+
     Options -Indexes +FollowSymLinks
     AllowOverride All
     Order allow,deny
     Allow from all
     Require all granted
 
-    # Set Variables
-    SetEnv ENVIRONMENT PROD
-
-    # Disable appending a "/" and 301 redirection when a directory
-    # matches the requested URL
     DirectorySlash Off
-    
-    # Set Rewrite Engine ON to direct all requests to
-    # the `bootstrap.php` file
+
+    # Rewrite Engine to direct all requests to bootstrap.php file
     RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-d   # Not a dir
-    RewriteCond %{REQUEST_FILENAME} !-f   # Not a file
-    RewriteRule . bootstrap.php [QSA,L]
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ bootstrap.php [L]
   </Directory>
 </VirtualHost>
 ```
+
 ### Using .htaccess file
 ```txt
     SetEnv ENVIRONMENT PROD
