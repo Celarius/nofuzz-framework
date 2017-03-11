@@ -1,8 +1,10 @@
 <?php declare(strict_types=1);
 
+use PHPUnit\Framework\TestCase;
+
 namespace Nofuzz;
 
-class HelpersTest extends \PHPUnit_Framework_TestCase
+class HelpersTest extends TestCase
 {
   protected $app;
 
