@@ -4,8 +4,9 @@
  *
  *   Wraps the OpenSSL encrypt() and decrypt() methods into easily usable helper methods
  *
- *   $encoded = Cipher::encrypt('This is plain text','SuperSecretPassword');
- *   $plaintext = Cipher::decrypt($encoded,'SuperSecretPassword');
+ *   $encryptedValue = \\Nofuzz\\Helpers\\Cipher::encrypt( $plain );
+ *
+ *   $plain = \\Nofuzz\\Helpers\\Cipher::decrypt( $encryptedValue );
  *
  * @package  Nofuzz
  */

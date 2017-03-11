@@ -1,7 +1,7 @@
 # Changelog
 See [Roadmap](roadmap.md) for details on whats in the pipe
 
-# v0.5.1
+# v0.5.2
 Status: In Dev
 * Added HTTP Authentication middleware (Basic,Apikey,Bearer(JWT))
 * Added Dependency injection container (supports anonymous funcs)
@@ -12,5 +12,3 @@ Status: In Dev
 * Added Message Digest/Hashing [Hash Helper](src/Helpers/Hash.php) helper
 * Added [UUID Helper](src/Helpers/UUID.php) helper
 * Added `Config->loadAndMerge()` method to `\Nofuzz\Config\Client` class
-
-

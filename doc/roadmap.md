@@ -5,8 +5,4 @@ The following features/changes are planned. Please use the version number as Mil
 # v0.6.0
 Status: Not started
 
----
-# v0.5.2
-Status: Not started
-
 

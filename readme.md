@@ -18,13 +18,13 @@ $ composer require nofuzz/framework
 
 ---
 ## Documentation
-See [Documentation](documentation.md)
+See [Documentation](doc/documentation.md)
 
-See [Installing](installing.md)
+See [Installing](doc/installing.md)
 
-See [Changelog](changelog.md)
+See [Changelog](doc/changelog.md)
 
-See [Roadmap](roadmap.md)
+See [Roadmap](doc/roadmap.md)
 
 
 ---
