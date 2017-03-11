@@ -14,7 +14,7 @@
 
 namespace Nofuzz\Helpers;
 
-class Cipher // implements \Nofuzz\Helpers\CipherInterface
+class Cipher implements \Nofuzz\Helpers\CipherInterface
 {
   /**
    * Encrypt $data with $secret

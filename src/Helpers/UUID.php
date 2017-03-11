@@ -12,10 +12,14 @@
 
 namespace Nofuzz\Helpers;
 
-class UUID // implements \Nofuzz\Helpers\UUIDInterface
+class UUID implements \Nofuzz\Helpers\UUIDInterface
 {
-
-  public static function generate()
+  /**
+   * Generate v4 UUID
+   *
+   * @return string
+   */
+  public static function generate(): string
   {
     return sprintf( '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
         // 32 bits for "time_low"

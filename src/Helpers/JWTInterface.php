@@ -1,6 +1,6 @@
 <?php
 /**
- * JSON Web Token Class
+ * JWT Helper INterface
  *
  * @package  Nofuzz
  */

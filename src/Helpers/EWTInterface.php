@@ -1,6 +1,6 @@
 <?php
 /**
- * Encrypted Web Token Class
+ * Encrypted Web Token Interface
  *
  * @package  Nofuzz
  */
