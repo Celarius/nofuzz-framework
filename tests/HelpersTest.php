@@ -34,7 +34,7 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
 
     $a = \Nofuzz\Helpers\Hash::generate( $plain, 'SHA256' );
 
-    $this->assertSame($hash, $a);
+    $this->assertEquals($hash, $a);
   }
 
   /** Test UUID generation */
