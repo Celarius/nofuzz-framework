@@ -20,7 +20,7 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
   {
     $plain = 'Let this be the light';
 
-    $a = \Nofuzz\Helpers\Cipher::encryt( $plain, $this->secret );
+    $a = \Nofuzz\Helpers\Cipher::encrypt( $plain, $this->secret );
     $b = \Nofuzz\Helpers\Cipher::decrypt( $plain, $this->secret );
 
     $this->assertSame($a, $b);
