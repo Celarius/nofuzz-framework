@@ -20,8 +20,8 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
   {
     $plain = 'Let this be the light';
 
-    $a = \\Nofuzz\\Helpers\\Cipher::encryt( $plain, $this->secret );
-    $b = \\Nofuzz\\Helpers\\Cipher::decrypt( $plain, $this->secret );
+    $a = \Nofuzz\Helpers\Cipher::encryt( $plain, $this->secret );
+    $b = \Nofuzz\Helpers\Cipher::decrypt( $plain, $this->secret );
 
     $this->assertSame($a, $b);
   }
@@ -32,7 +32,7 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
     $plain = 'Let this be the light';
     $hash  = '3c47c0efe106197074e89d6eb28babb90d2ad6fcc5dd7b37fec77b3bb00003d0';
 
-    $a = \\Nofuzz\\Helpers\\Hash::generate( $plain, 'SHA256' );
+    $a = \Nofuzz\Helpers\Hash::generate( $plain, 'SHA256' );
 
     $this->assertSame($hash, $a);
   }
@@ -40,7 +40,7 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
   /** Test UUID generation */
   public function testUuid()
   {
-    $a = \\Nofuzz\\Helpers\\UUID::generate();
+    $a = \Nofuzz\Helpers\UUID::generate();
 
     $this->assertTrue( strlen($a)>0 );
   }
