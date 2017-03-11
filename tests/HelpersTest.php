@@ -1,15 +1,11 @@
 <?php declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase as TestCase;
-
 namespace Nofuzz;
 
-class HelpersTest extends TestCase
+class HelpersTest extends \PHPUnit\Framework\TestCase
 {
   protected $app;
-
   protected $secret;
-
 
   /** Setup test */
   public function setup()
