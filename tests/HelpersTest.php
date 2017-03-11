@@ -20,10 +20,10 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
   {
     $plain = 'Let this be the light';
 
-    $a = \Nofuzz\Helpers\Cipher::encrypt( $plain, $this->secret );
-    $b = \Nofuzz\Helpers\Cipher::decrypt( $plain, $this->secret );
+    $encrypted = \Nofuzz\Helpers\Cipher::encrypt( $plain, $this->secret );
+    $a = \Nofuzz\Helpers\Cipher::decrypt( $encrypted, $this->secret );
 
-    $this->assertSame($a, $b);
+    $this->assertEquals($plain, $a);
   }
 
   /** Test OpenSSL Message Digest (SHA256) */
