@@ -34,6 +34,7 @@ Routes are the heart of the application. App developers define the request route
 _The reason this is a JSON file is that 3rd party applications/installers etc. can modify the file easily without any other knowledge than JSON and the structure._
 
 **"Groups" element parameters**
+
 | Param | Type | Description |
 |:------|:-----|:------------|
 | name | `string` | The name of the Route Group (optional) |
@@ -43,6 +44,7 @@ _The reason this is a JSON file is that 3rd party applications/installers etc. c
 | after | `array` | Array wth full namespaced name of any middleware to run After controller is called |
 
 **"Route" element parameters**
+
 | Param | Type | Description |
 |:------|:-----|:------------|
 | methods | `string` or `array` | Defines the methods this route will match. Defaults is "" which matches ALL methods. An array may be specific with the matching methods: `"methods":["GET","POST"]`. The same can be done with a comma separated list: `"methods":"GET,POST"`. Both methods are equal |
@@ -92,6 +94,8 @@ All app-defined Middleware extend `\Nofuzz\Middleware` and override the `handle(
 Database connections are handeled by the Connection Manager. An application can open connections to different databases simultaneously.
 
 To obtain a connection to a database, a `db('<name_of_connection')` is issued. This will look in the `/app/Config/config.json` file in the `connections` section to identify the Connection and connect to it. 
+
+The return value from `db('')` is a PDO connection.
 
 
 # Global functions

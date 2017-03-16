@@ -4,7 +4,7 @@
  *
  *   Wraps the OpenSSL digest() method into easily usable helper method
  *
- *   $digest = Hash::generate('This is the data','SHA256');
+ *   $digest = \Nofuzz\Helpers\Hash::generate('This is the data','SHA256');
  *
  * @package  Nofuzz
  */

@@ -4,9 +4,9 @@
  *
  *   Wraps the OpenSSL encrypt() and decrypt() methods into easily usable helper methods
  *
- *   $encryptedValue = \\Nofuzz\\Helpers\\Cipher::encrypt( $plain );
+ *   $encryptedValue = \Nofuzz\Helpers\Cipher::encrypt( $plain );
  *
- *   $plain = \\Nofuzz\\Helpers\\Cipher::decrypt( $encryptedValue );
+ *   $plain = \Nofuzz\Helpers\Cipher::decrypt( $encryptedValue );
  *
  * @package  Nofuzz
  */
