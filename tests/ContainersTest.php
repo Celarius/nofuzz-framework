@@ -35,10 +35,10 @@ class ContainersTest extends \PHPUnit\Framework\TestCase
     $a = 'My Container String';
 
     # Set it
-    app()->container('string', $a);
+    $this->app->container('string', $a);
 
     # Get it
-    $b = app()->container('string');
+    $b = $this->app->container('string');
 
     $this->assertEquals($a, $b);
   }
@@ -49,10 +49,10 @@ class ContainersTest extends \PHPUnit\Framework\TestCase
     $a = [ 'a'=>'a value','b'=>'b value','c'=>'c value' ];
 
     # Set it
-    app()->container('array', $a);
+    $this->app->container('array', $a);
 
     # Get it
-    $b = app()->container('array');
+    $b = $this->app->container('array');
 
     $this->assertEquals($a, $b);
   }
@@ -64,10 +64,10 @@ class ContainersTest extends \PHPUnit\Framework\TestCase
     $a->setProperty('I get set, therefore I exist');
 
     # Set it
-    app()->container('object', $a);
+    $this->app->container('object', $a);
 
     # Get it
-    $b = app()->container('object');
+    $b = $this->app->container('object');
 
     $this->assertEquals($a->getProperty(), $b->getProperty());
   }
@@ -77,14 +77,14 @@ class ContainersTest extends \PHPUnit\Framework\TestCase
   public function testContainerCallable()
   {
     # Set it
-    app()->container('adder',
+    $this->app->container('adder',
       function(int $x, int $y) {
         return $x+$y;
       }
     );
 
     # Call it
-    $value = app()->container('adder')(1,2);
+    $value = $this->app->container('adder')(1,2);
 
     $this->assertEquals(3, (int) $value);
   }
