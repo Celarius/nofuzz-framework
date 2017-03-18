@@ -570,23 +570,16 @@ class Application
   /**
    * Get or Set a Container value.
    *
-   * When Getting the value, if it is a callable it is called,
-   * and the result from the function is returned
-   *
    * @param  string     $name       Dependency name
    * @param  mixed|null $value      Value to SET. if Omitted, then $name is returned (if found)
    * @return mixed|null
    */
   public function container(string $name, $value=null)
   {
+    # Getting or Setting the value?
     if (is_null($value)) {
       # Return what $name has stored in $container array
       $value = $this->container[$name] ?? null;
-
-      # if it's a callable, call it!
-      if (is_callable($value, false, $callable_name)) {
-        $value = $this->container[$name]();
-      }
 
     } else {
       # Setting the container value $name to $value
