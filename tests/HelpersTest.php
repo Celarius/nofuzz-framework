@@ -37,12 +37,19 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
     $this->assertEquals($hash, $a);
   }
 
-  /** Test UUID generation */
-  public function testUuid()
+  /** Test UUID v4 generation */
+  public function testUuidV4()
   {
-    $a = \Nofuzz\Helpers\UUID::generate();
+    $a = \Nofuzz\Helpers\UUID::v4();
 
     $this->assertTrue( strlen($a)>0 );
   }
 
+  /** Test UUID v5 generation */
+  public function testUuidV5()
+  {
+    $a = \Nofuzz\Helpers\Uuid::v5( 'fe590d59-b698-4246-98a0-521e31427ee4', 'Glorius');
+
+    $this->assertEquals( '0eeda2f3-b68c-5ae7-a0ab-cc14eac039db',$a );
+  }
 }

@@ -49,7 +49,7 @@ class UUID implements \Nofuzz\Helpers\UUIDInterface
    */
   public static function v4(): string
   {
-    return $this->generate();
+    return self::generate();
   }
 
   /**
