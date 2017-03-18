@@ -60,7 +60,7 @@ class ContainersTest extends \PHPUnit\Framework\TestCase
   /** Test Container Object */
   public function testContainerObject()
   {
-    $a = new \ContainerTestClass();
+    $a = new ContainerTestClass();
     $a->setProperty('I get set, therefore I exist');
 
     # Set it
