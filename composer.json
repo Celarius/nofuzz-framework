@@ -1,11 +1,14 @@
 {
   "name": "nofuzz/framework",
-  "description": "A PHP nano framework for REST API's",
+  "description": "A PHP nano framework for REST API's & Micro-Services",
   "keywords": [
-    "Framework",
-    "REST",
-    "API",
-    "MicroService"
+    "php7",
+    "php-framework"
+    "framework",
+    "api",
+    "rest",
+    "rest-api",
+    "MicroService",
   ],
   "homepage": "http://nofuzz.celarius.com",
   "type": "framework",
