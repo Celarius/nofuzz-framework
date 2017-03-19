@@ -3,12 +3,12 @@
   "description": "A PHP nano framework for REST API's & Micro-Services",
   "keywords": [
     "php7",
-    "php-framework"
+    "php-framework",
     "framework",
     "api",
     "rest",
     "rest-api",
-    "MicroService",
+    "MicroService"
   ],
   "homepage": "http://nofuzz.celarius.com",
   "type": "framework",
