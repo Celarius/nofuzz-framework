@@ -109,7 +109,7 @@ if (!function_exists('db')) {
    *
    * @return object
    */
-  function db(string $connectionName)
+  function db(string $connectionName='')
   {
     global $app;
     return $app->getConnectionManager()->getConnection($connectionName);

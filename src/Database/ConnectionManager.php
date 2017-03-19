@@ -1,3 +1,4 @@
+error_log('> Found connection: '.print_r($connection,true));
 <?php
 /**
  * ConnectionManager

@@ -18,7 +18,7 @@ abstract class BaseDao implements \Nofuzz\Database\BaseDaoInterface
    *
    * @param \Nofuzz\Database\PdoConnectionInterface $connection
    */
-  public function __construct(string $connectionName)
+  public function __construct(string $connectionName='')
   {
     $this->connectionName = $connectionName;
     $this->connection = null;
