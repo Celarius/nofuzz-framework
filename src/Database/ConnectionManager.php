@@ -1,4 +1,3 @@
-error_log('> Found connection: '.print_r($connection,true));
 <?php
 /**
  * ConnectionManager
@@ -14,35 +13,22 @@ error_log('> Found connection: '.print_r($connection,true));
 /*
 Example:
 
-  # Getting the Connection
+  # Get a Connection by Name
   $dbCon = db('name1'); // Gives you back a PDO Object connected to the Database
 
+  # Get 1st available Connection
+  $dbCon = db('');
 */
 namespace Nofuzz\Database;
 
 class ConnectionManager implements \Nofuzz\Database\ConnectionManagerInterface
 {
-  protected $connections = array();
-
-  /**
-   * Constructor
-   */
-  public function __construct()
-  {
-  }
-
-  /**
-   * Destructor
-   */
-  public function __destruct()
-  {
-    // Close all Database connections
-  }
+  protected $connections = [];
 
   /**
    * Find a connection based on name
    *
-   * @param  string   $connectionName Name of the connection (from Config)
+   * @param  string   $connectionName       Name of the connection (from Config)
    * @return null | object
    */
   public function findConnection(string $connectionName)
@@ -63,7 +49,7 @@ class ConnectionManager implements \Nofuzz\Database\ConnectionManagerInterface
   /**
    * Get or Create a connection
    *
-   * @param  string $connectionName Name of the connection (from Config)
+   * @param  string $connectionName         Name of the connection (from Config)
    * @return null | object
    */
   public function getConnection(string $connectionName)
@@ -118,7 +104,8 @@ class ConnectionManager implements \Nofuzz\Database\ConnectionManagerInterface
    * Creates a Connection based on the $connectionName
    *
    * Finds the corresponding connection in the config and uses it
-   * to instanciate a connection
+   * to instanciate a connection. If the ConnectionName is empty, we will use
+   * the 1st available record in the Connections list.
    *
    * @param  string $connectionName [description]
    * @return [type]                 [description]
@@ -127,6 +114,14 @@ class ConnectionManager implements \Nofuzz\Database\ConnectionManagerInterface
   {
     # Get the connection form the connections array
     $connection = $this->connections[strtolower($connectionName)] ?? null;
+
+    # If no connection found, and the list is empty, read in 1st one
+    if (is_null($connection) && count($this->connections)==0 ) {
+      # Get connections configuration
+      $arr = config()->get('connections');
+      reset($arr);
+      $connectionName = key($arr);
+    }
 
     if (is_null($connection)) {
       # Get connection configuration
