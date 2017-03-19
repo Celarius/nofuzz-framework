@@ -1,8 +1,14 @@
 # Changelog
 See [Roadmap](roadmap.md) for details on whats in the pipe
 
-# v0.5.2
+# v0.5.3
 Status: In Dev
+* Accessing the database connection with db() or db('') now uses 1st connection in `config.json`
+* Added UUID v5 generation to UUID helper
+* Added Units-Tests for many things (work in progress)
+* PHP 7.1.3 compatibility verified
+
+# v0.5.2
 * Added HTTP Authentication middleware (Basic,Apikey,Bearer(JWT))
 * Added Dependency injection container (supports anonymous funcs)
 * Added `Method` definition to Routes array
