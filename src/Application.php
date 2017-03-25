@@ -199,7 +199,7 @@ class Application
    */
   public function errorHandler($errNo, $errStr, $errFile, $errLine, array $errContext)
   {
-    if ( ($this->setErrorLevel & $errNo)==0) {
+    if (!(error_reporting() & $errNo)) {
         // This error code is not included in error_reporting, so let it fall
         // through to the standard PHP error handler
         // Example all @ prefixed functions
