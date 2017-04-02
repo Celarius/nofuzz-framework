@@ -8,6 +8,7 @@ Status: In Dev
 * Added Units-Tests for many things (work in progress)
 * PHP 7.1.3 compatibility verified
 * errorHandler() in application.php fixed to not log unwanted data
+* Renamed "BaseDao" to "AbstractBaseDao" and "BaseDBObject" to "AbstractBaseEntity" 
 
 # v0.5.2
 * Added HTTP Authentication middleware (Basic,Apikey,Bearer(JWT))

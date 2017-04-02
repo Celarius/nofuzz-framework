@@ -8,7 +8,7 @@
 
 namespace Nofuzz\Database;
 
-class BaseDbObject
+abstract class AbstractBaseEntity
 {
   /**
    * Constructor

@@ -8,7 +8,7 @@
 
 namespace Nofuzz\Database;
 
-abstract class BaseDao implements \Nofuzz\Database\BaseDaoInterface
+abstract class AbstractBaseDao implements \Nofuzz\Database\AbstractBaseDaoInterface
 {
   protected $connectionName;
   protected $connection;
