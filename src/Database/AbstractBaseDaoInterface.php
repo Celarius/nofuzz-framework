@@ -8,7 +8,7 @@
 
 namespace Nofuzz\Database;
 
-interface BaseDaoInterface
+interface AbstractBaseDaoInterface
 {
   /**
    * Constructor
