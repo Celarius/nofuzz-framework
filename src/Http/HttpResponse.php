@@ -97,12 +97,12 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
     http_response_code($this->statusCode);
 
     # Update Content-Type Header
-    if ( !empty($this->getHeader('Content-Type')) ) {
+    if ( empty($this->getHeader('Content-Type')) ) {
       $this->setHeader('Content-Type', $this->contentType.'; charset='.$this->charSet);
     }
 
     # Update Cache-Control Header
-    if ( !empty($this->cacheControl) ) {
+    if ( empty($this->getHeader('Cache-Control')) ) {
       $this->setHeader('Cache-Control', $this->cacheControl);
     }
 
