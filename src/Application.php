@@ -113,7 +113,7 @@ class Application
     # Load the Routes
     #
     if ( empty($routesFilename) ) {
-      $routesFilename = $this->getBasePath().'/app/config/routes.json';
+      $routesFilename = $this->getBasePath().'/app/Config/routes.json';
     }
     $this->loadRoutes( $routesFilename );
   }
