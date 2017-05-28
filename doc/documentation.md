@@ -110,6 +110,7 @@ function cache(string $driverName='')
 
 function request()
 function queryParam(string $paramName)
+function queryParams()
 function postParam(string $paramName)
 function cookieParam(string $paramName)
 function response()
