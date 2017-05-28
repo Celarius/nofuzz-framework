@@ -67,7 +67,7 @@ class CockroachDb extends \Nofuzz\Database\PdoConnection
             'host=' . $this->GetHost().';' . 
             'port=' . ($this->GetPort()!=0 ? $this->GetPort() . ':' : '26257' ) .
             'dbname=' . $this->GetSchema().';' .
-            'sslmode=' . 'disable';
+            'sslmode=' . $this->getSSLMode();
             // 'charset='.$this->GetCharset();
     # Set it
     $this->setDsn($_dsn);
