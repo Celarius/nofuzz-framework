@@ -1,8 +1,12 @@
 # Changelog
 See [Roadmap](roadmap.md) for details on whats in the pipe
 
-# v0.5.3
+# v0.5.4
 Status: In Dev
+* Added CockroachDb Database Driver
+* Added PostgreSql Database Driver
+
+# v0.5.3
 * Accessing the database connection with db() or db('') now uses 1st connection in `config.json`
 * Added UUID v5 generation to UUID helper
 * Added Units-Tests for many things (work in progress)
