@@ -157,6 +157,18 @@ if (!function_exists('queryParam')) {
   }
 }
 
+if (!function_exists('queryParams')) {
+  /**
+   * Get Query Params ($_GET variables)
+   *
+   * @return mixed
+   */
+  function queryParams()
+  {
+    return $app->getRequest()->getQueryParams()[$paramName] ?? [];
+  }
+}
+
 if (!function_exists('postParam')) {
   /**
    * Get a Post Param ($_POST variable)
