@@ -37,15 +37,14 @@ class CockroachDb extends \Nofuzz\Database\PdoConnection
   public function __construct(string $connectionName, array $params=[])
   {
     # CockroachDb has it's own $sslmode property, extract it
-    $this->setSSLMode($params['sslmode'] ?? '');
+    $this->setSSLMode($params['sslmode'] ?? 'disable');
 
     # CockroachDb default PDO options
     if (count($params['options'] ?? [])==0) {
       $params['options'] = [
           \PDO::ATTR_PERSISTENT => TRUE,
           \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-          \PDO::ATTR_EMULATE_PREPARES => TRUE,
-          \PDO::ATTR_AUTOCOMMIT => FALSE
+          \PDO::ATTR_EMULATE_PREPARES => TRUE
         ];
     }
 

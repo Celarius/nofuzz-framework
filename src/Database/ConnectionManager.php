@@ -131,8 +131,15 @@ class ConnectionManager implements \Nofuzz\Database\ConnectionManagerInterface
       if ( strcasecmp($connConf['type'] ?? '','PDO')==0 ) {
         $className = '\\Nofuzz\\Database\\Drivers\\'.ucfirst($connConf['type']).'\\'.ucfirst($connConf['driver']) ;
 
-        # Create the Connection (PdoConnection)
-        $connection = new $className($connectionName, $connConf);
+        try {
+          # Create the Connection (PdoConnection)
+          $connection = new $className($connectionName, $connConf);
+        } catch (\Exception $e) {
+          logger()->critical(
+            $e->getMessage(),
+            $e->getTraceAsString()
+          );
+        }
       }
     }
 
