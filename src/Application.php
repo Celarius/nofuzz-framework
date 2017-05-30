@@ -101,7 +101,7 @@ class Application
       $this->cacheManager->createCache( $driver, $this->getConfig()->get('cache.options.'.$driver) ) ;
 
       # Debug log
-      $this->getLogger()->debug('Created Cache',['rid'=>app('requestId'),'driver'=>$driver]);
+      // $this->getLogger()->debug('Created Cache',['rid'=>app('requestId'),'driver'=>$driver]);
     }
 
 
@@ -332,7 +332,13 @@ class Application
 
               # Run handler
               $routeResult = $routeHandler->$handlerMethod($routeInfo['args']);
+            } else {
+              # Log
+              $this->getLogger()->error('Method not found in controller ',['rid'=>app('requestId'),'controller'=>$handlerClass,'method'=>$handlerMethod]);
             }
+          } else {
+            # Debug log
+            $this->getLogger()->debug('Controller not found ',['rid'=>app('requestId'),'controller'=>$handlerClass]);
           }
         }
 
@@ -394,7 +400,7 @@ class Application
       }
 
       # Debug log
-      logger()->debug('Loaded routes',['rid'=>app('requestId'),'file'=>$filename]);
+      // $this->getLogger()->debug('Loaded routes',['rid'=>app('requestId'),'file'=>$filename]);
 
       return true; // routes added
     }
