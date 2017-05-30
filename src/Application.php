@@ -90,12 +90,11 @@ class Application
     $timeZone = $this->getConfig()->get('application.global.timezone','UTC');
     date_default_timezone_set($timeZone);
 
-
-
     #
     # Initialzie CacheManager & Cache
     #
     $this->cacheManager = new \Nofuzz\SimpleCache\CacheManager();
+
     # Create a Cache Driver (if specified)
     if ( $this->getConfig()->get('cache.driver') != null ) {
       $driver = $this->getConfig()->get('cache.driver');
@@ -332,7 +331,6 @@ class Application
               $routeResult = $routeHandler->$handlerMethod($routeInfo['args']);
             }
           }
-
         }
 
         #
@@ -351,6 +349,9 @@ class Application
 
       } else {
         # No route matched the URI, we'll look in the next group or exit the foreach()
+
+        # Debug log
+        logger()->debug('No route matched request',['rid'=>app('requestId'),'method'=>$httpMethod,'path'=>$path]);
       }
     }
 
@@ -388,6 +389,9 @@ class Application
       } else {
         throw new \RunTimeException('Invalid JSON file "'.$filename.'"');
       }
+
+      # Debug log
+      logger()->debug('Loaded routes',['rid'=>app('requestId'),'file'=>$filename]);
 
       return true; // routes added
     }

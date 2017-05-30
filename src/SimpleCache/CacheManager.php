@@ -57,6 +57,9 @@ class CacheManager implements \Nofuzz\SimpleCache\CacheManagerInterface
     # Add to the list of driverss
     if ( !is_null($driverClass) ) {
       $this->drivers[strtolower($driverName)] = $driverClass;
+
+      # Debug log
+      logger()->debug('Created Cache',['rid'=>app('requestId'),'driver'=>$driverClassName]);
     }
 
     return $driverClass;
