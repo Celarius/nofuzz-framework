@@ -99,6 +99,9 @@ class Application
     if ( $this->getConfig()->get('cache.driver') != null ) {
       $driver = $this->getConfig()->get('cache.driver');
       $this->cacheManager->createCache( $driver, $this->getConfig()->get('cache.options.'.$driver) ) ;
+
+      # Debug log
+      $this->getLogger()->debug('Created Cache',['rid'=>app('requestId'),'driver'=>$driver]);
     }
 
 
@@ -351,7 +354,7 @@ class Application
         # No route matched the URI, we'll look in the next group or exit the foreach()
 
         # Debug log
-        logger()->debug('No route matched request',['rid'=>app('requestId'),'method'=>$httpMethod,'path'=>$path]);
+        $this->getLogger()->debug('No route matched request',['rid'=>app('requestId'),'method'=>$httpMethod,'path'=>$path]);
       }
     }
 
