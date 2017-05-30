@@ -101,7 +101,7 @@ class Application
       $this->cacheManager->createCache( $driver, $this->getConfig()->get('cache.options.'.$driver) ) ;
 
       # Debug log
-      // $this->getLogger()->debug('Created Cache',['rid'=>app('requestId'),'driver'=>$driver]);
+      $this->getLogger()->debug('Created Cache',['driver'=>$driver]);
     }
 
 
@@ -294,18 +294,31 @@ class Application
         $routeResult = false;
         $afterResult = true; // assume all after handlers succeed
 
+        # Debug log
+        $this->getLogger()->debug('Route matched ',['handler'=>$routeInfo['handler']]);
+
         #
         # Run the Common AND Groups Before Middlewares (ServerRequestInterface)
         #
         $beforeMiddleware = array_merge($this->beforeMiddleware, $routeGroup->getBeforeMiddleware());
+
         foreach ($beforeMiddleware as $middleware)
         {
-          $beforeHandler = new $middleware($routeInfo['args']);
-          if (!$beforeHandler->handle($routeInfo['args'])) {
-            # Record outcome
-            $beforeResult = false;
-            # Stop processing more middleware
-            break;
+          if (class_exists($middleware) ) {
+            $beforeHandler = new $middleware($routeInfo['args']);
+
+            # Debug log
+            $this->getLogger()->debug('Running Before middleware',['rid'=>app('requestId'),'middleware'=>$middleware]);
+
+            if (!$beforeHandler->handle($routeInfo['args'])) {
+              # Record outcome
+              $beforeResult = false;
+              # Stop processing more middleware
+              break;
+            }
+          } else {
+            # Log
+            $this->getLogger()->warning('Before Middleware not found',['rid'=>app('requestId'),'middleware'=>$middleware]);
           }
         }
 
@@ -327,8 +340,14 @@ class Application
             # Check method existance
             if ($routeHandler && method_exists($routeHandler,'initialize') && method_exists($routeHandler,$handlerMethod))
             {
+              # Debug log
+              $this->getLogger()->debug('Running controller->initialize()',['rid'=>app('requestId'),'controller'=>$handlerClass]);
+
               # Initialize
               $routeHandler->initialize($routeInfo['args']);
+
+              # Debug log
+              $this->getLogger()->debug('Running controller->handle()',['rid'=>app('requestId'),'method'=>$handlerMethod]);
 
               # Run handler
               $routeResult = $routeHandler->$handlerMethod($routeInfo['args']);
@@ -348,9 +367,18 @@ class Application
         $afterMiddleware = array_merge($this->afterMiddleware,$routeGroup->getAfterMiddleware());
         foreach ($afterMiddleware as $middleware)
         {
-          $afterHandler = new $middleware($routeInfo['args']);
-          if (!$afterHandler->handle($routeInfo['args'])) {
-            return false;
+          if (class_exists($middleware) ) {
+            $afterHandler = new $middleware($routeInfo['args']);
+
+            # Debug log
+            $this->getLogger()->debug('Running After middleware',['rid'=>app('requestId'),'middleware'=>$middleware]);
+
+            if (!$afterHandler->handle($routeInfo['args'])) {
+              return false;
+            }
+          } else {
+            # Log
+            $this->getLogger()->warning('After Middleware not found',['rid'=>app('requestId'),'middleware'=>$middleware]);
           }
         }
 
@@ -400,7 +428,7 @@ class Application
       }
 
       # Debug log
-      // $this->getLogger()->debug('Loaded routes',['rid'=>app('requestId'),'file'=>$filename]);
+      $this->getLogger()->debug('Loaded routes',['file'=>$filename]);
 
       return true; // routes added
     }
