@@ -56,6 +56,10 @@ class Application
     # Create Config
     $this->config = new \Nofuzz\Config\Config($this->basePath.'/app/Config/config.json');
 
+    # Set Timezone - default to UTC
+    $timeZone = $this->getConfig()->get('application.global.timezone','UTC');
+    date_default_timezone_set($timeZone);
+
     # Get Code,Name,Version and Environment
     $this->code = $this->getConfig()->get('application.code','');
     $this->name = $this->getConfig()->get('application.name','');
@@ -85,10 +89,6 @@ class Application
 
     # HTTP Response
     $this->response = (new \Nofuzz\Http\HttpResponse())->setStatusCode(0);
-
-    # Set Timezone - default to UTC
-    $timeZone = $this->getConfig()->get('application.global.timezone','UTC');
-    date_default_timezone_set($timeZone);
 
     #
     # Initialzie CacheManager & Cache
