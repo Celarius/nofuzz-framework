@@ -137,7 +137,7 @@ class ConnectionManager implements \Nofuzz\Database\ConnectionManagerInterface
         } catch (\Exception $e) {
           logger()->critical(
             $e->getMessage(),
-            $e->getTraceAsString()
+            ['trace'=>$e->getTraceAsString()]
           );
         }
       }
