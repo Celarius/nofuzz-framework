@@ -56,6 +56,10 @@ class Application
     # Create Config
     $this->config = new \Nofuzz\Config\Config($this->basePath.'/app/Config/config.json');
 
+    # Set Timezone - default to UTC
+    $timeZone = $this->getConfig()->get('application.global.timezone','UTC');
+    date_default_timezone_set($timeZone);
+
     # Get Code,Name,Version and Environment
     $this->code = $this->getConfig()->get('application.code','');
     $this->name = $this->getConfig()->get('application.name','');
@@ -86,20 +90,18 @@ class Application
     # HTTP Response
     $this->response = (new \Nofuzz\Http\HttpResponse())->setStatusCode(0);
 
-    # Set Timezone - default to UTC
-    $timeZone = $this->getConfig()->get('application.global.timezone','UTC');
-    date_default_timezone_set($timeZone);
-
-
-
     #
     # Initialzie CacheManager & Cache
     #
     $this->cacheManager = new \Nofuzz\SimpleCache\CacheManager();
+
     # Create a Cache Driver (if specified)
     if ( $this->getConfig()->get('cache.driver') != null ) {
       $driver = $this->getConfig()->get('cache.driver');
       $this->cacheManager->createCache( $driver, $this->getConfig()->get('cache.options.'.$driver) ) ;
+
+      # Debug log
+      $this->getLogger()->debug('Created Cache',['driver'=>$driver]);
     }
 
 
@@ -292,18 +294,31 @@ class Application
         $routeResult = false;
         $afterResult = true; // assume all after handlers succeed
 
+        # Debug log
+        $this->getLogger()->debug('Route matched ',['handler'=>$routeInfo['handler']]);
+
         #
         # Run the Common AND Groups Before Middlewares (ServerRequestInterface)
         #
         $beforeMiddleware = array_merge($this->beforeMiddleware, $routeGroup->getBeforeMiddleware());
+
         foreach ($beforeMiddleware as $middleware)
         {
-          $beforeHandler = new $middleware($routeInfo['args']);
-          if (!$beforeHandler->handle($routeInfo['args'])) {
-            # Record outcome
-            $beforeResult = false;
-            # Stop processing more middleware
-            break;
+          if (class_exists($middleware) ) {
+            $beforeHandler = new $middleware($routeInfo['args']);
+
+            # Debug log
+            $this->getLogger()->debug('Running Before middleware',['rid'=>app('requestId'),'middleware'=>$middleware]);
+
+            if (!$beforeHandler->handle($routeInfo['args'])) {
+              # Record outcome
+              $beforeResult = false;
+              # Stop processing more middleware
+              break;
+            }
+          } else {
+            # Log
+            $this->getLogger()->warning('Before Middleware not found',['rid'=>app('requestId'),'middleware'=>$middleware]);
           }
         }
 
@@ -325,14 +340,25 @@ class Application
             # Check method existance
             if ($routeHandler && method_exists($routeHandler,'initialize') && method_exists($routeHandler,$handlerMethod))
             {
+              # Debug log
+              $this->getLogger()->debug('Running controller->initialize()',['rid'=>app('requestId'),'controller'=>$handlerClass]);
+
               # Initialize
               $routeHandler->initialize($routeInfo['args']);
 
+              # Debug log
+              $this->getLogger()->debug('Running controller->handle()',['rid'=>app('requestId'),'method'=>$handlerMethod]);
+
               # Run handler
               $routeResult = $routeHandler->$handlerMethod($routeInfo['args']);
+            } else {
+              # Log
+              $this->getLogger()->error('Method not found in controller ',['rid'=>app('requestId'),'controller'=>$handlerClass,'method'=>$handlerMethod]);
             }
+          } else {
+            # Debug log
+            $this->getLogger()->debug('Controller not found ',['rid'=>app('requestId'),'controller'=>$handlerClass]);
           }
-
         }
 
         #
@@ -341,9 +367,18 @@ class Application
         $afterMiddleware = array_merge($this->afterMiddleware,$routeGroup->getAfterMiddleware());
         foreach ($afterMiddleware as $middleware)
         {
-          $afterHandler = new $middleware($routeInfo['args']);
-          if (!$afterHandler->handle($routeInfo['args'])) {
-            return false;
+          if (class_exists($middleware) ) {
+            $afterHandler = new $middleware($routeInfo['args']);
+
+            # Debug log
+            $this->getLogger()->debug('Running After middleware',['rid'=>app('requestId'),'middleware'=>$middleware]);
+
+            if (!$afterHandler->handle($routeInfo['args'])) {
+              return false;
+            }
+          } else {
+            # Log
+            $this->getLogger()->warning('After Middleware not found',['rid'=>app('requestId'),'middleware'=>$middleware]);
           }
         }
 
@@ -351,6 +386,9 @@ class Application
 
       } else {
         # No route matched the URI, we'll look in the next group or exit the foreach()
+
+        # Debug log
+        $this->getLogger()->debug('No route matched request',['rid'=>app('requestId'),'method'=>$httpMethod,'path'=>$path]);
       }
     }
 
@@ -388,6 +426,9 @@ class Application
       } else {
         throw new \RunTimeException('Invalid JSON file "'.$filename.'"');
       }
+
+      # Debug log
+      $this->getLogger()->debug('Loaded routes',['file'=>$filename]);
 
       return true; // routes added
     }
