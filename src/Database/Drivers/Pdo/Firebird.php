@@ -55,7 +55,8 @@ class Firebird extends \Nofuzz\Database\PdoConnection
   {
     # Build the DSN
     $_dsn = $this->getDriver().':'.
-            'dbname='.$this->GetHost().':'.($this->GetPort()!=0 ? ':'.$this->GetPort().':' : '' ).$this->GetSchema().';'.
+            'host='.$this->GetHost().($this->GetPort()!=0 ? ':'.$this->GetPort() : '' ).';'.
+            'dbname='.$this->GetSchema().';'.
             'charset='.$this->GetCharset();
     # Set it
     $this->setDsn($_dsn);
