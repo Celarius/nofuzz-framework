@@ -5,6 +5,7 @@ See [Roadmap](roadmap.md) for details on whats in the pipe
 Status: In Dev
 * Added CockroachDb Database Driver
 * Added PostgreSql Database Driver
+* Moved Route Loading to application->run(), to better catch errors in routes.json
 
 # v0.5.3
 * Accessing the database connection with db() or db('') now uses 1st connection in `config.json`

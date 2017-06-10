@@ -39,9 +39,8 @@ class Application
    * Constructor
    *
    * @param string $basePath        Application folder (where "/app" is located)
-   * @param string $routesFilename  Name of routers file to load (empty by default)
    */
-  public function __construct( string $basePath, string $routesFilename='' )
+  public function __construct( string $basePath )
   {
     #
     # Require the Globals
@@ -109,15 +108,6 @@ class Application
     # DB Manager
     #
     $this->connectionManager = new \Nofuzz\Database\ConnectionManager();
-
-
-    #
-    # Load the Routes
-    #
-    if ( empty($routesFilename) ) {
-      $routesFilename = $this->getBasePath().'/app/Config/routes.json';
-    }
-    $this->loadRoutes( $routesFilename );
   }
 
   /**
@@ -274,11 +264,21 @@ class Application
   /**
    * Run the application
    *
-   * @param  mixed $args        [description]
-   * @return bool               False if request failed, True for success
+   * @param  mixed $args              [description]
+   * @param  string $routesFilename   Name of routers file to load (empty by default)
+   * @return bool                     False if request failed, True for success
    */
-  public function run( ... $args )
+  public function run( string $routesFilename=''  )
   {
+    #
+    # Load the Routes
+    #
+    if ( empty($routesFilename) ) {
+      $routesFilename = $this->getBasePath().'/app/Config/routes.json';
+    }
+    $this->loadRoutes( $routesFilename );
+
+
     # Get Method and URI
     $httpMethod = $this->getRequest()->getMethod();
     $path = $this->getRequest()->getUri()->getPath();
@@ -425,6 +425,7 @@ class Application
         $this->afterMiddleware = ($routesFile['common']['after'] ?? []);
       } else {
         throw new \RunTimeException('Invalid JSON file "'.$filename.'"');
+
       }
 
       # Debug log
