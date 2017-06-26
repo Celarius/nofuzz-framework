@@ -22,6 +22,7 @@ interface HttpResponseInterface
   function getHeaders();
   function getHeader(string $header, string $default=''): string;
   function getBody();
+  function getFileBody(): string;
   function getCharSet();
 
   # Setters
@@ -30,6 +31,7 @@ interface HttpResponseInterface
   function setHeader(string $header, string $value);
   function setBody(string $body='');
   function setJsonBody(array $data);
+  function setFileBody(string $fileBody, string $contentType='');
   function setCacheControl(string $value);
   function setContentType(string $value);
   function setCharSet(string $charSet);

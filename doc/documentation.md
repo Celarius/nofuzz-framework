@@ -3,6 +3,7 @@
   - Order of loaded files
 - Routes
 - Controllers
+  - Generating responses
 - Middleware
 - Database connections
 - Global functions
@@ -83,6 +84,19 @@ Controllers are the classes that routes lead to. When defining a route to a Cont
 
 Before the specified method in the Controller is called, a special `initialize()` method gets called, so generic initiaization can be done.
 
+## Generating responses
+To generate responses in controller the following functions are available in httpResponse:
+```php
+// Direct 
+function success(int $code, string $body=''): \Nofuzz\Http\HTTPResponse;
+function redirect(int $code, string $url): \Nofuzz\Http\HTTPResponse;
+function error(int $code, string $body=''): \Nofuzz\Http\HTTPResponse;
+function errorJson(int $code, string $message, string $details=''): \Nofuzz\Http\HTTPResponse;
+
+function setBody(string $body='');
+function setJsonBody(array $data);
+function setFileBody(string $filename);
+```
 
 # Middleware
 Nofuzz has two types of Middleware: `Before` and `After`. As the names indicate the _Before Middlewares_ are called before the Controller handles  the request, and the _After Middlewares_ are called after the Controller has handled the request (regardless of outcome of Controller handler).

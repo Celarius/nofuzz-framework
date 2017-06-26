@@ -343,7 +343,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
    *
    * @return mixed
    */
-  public function getFileBody()
+  public function getFileBody(): string
   {
     return $this->fileBody;
   }
