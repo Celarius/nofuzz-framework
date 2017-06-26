@@ -260,14 +260,14 @@ class Application
     # Set 500 error code as well as something unexpected happened
     $this->getResponse()->setStatusCode(500);
 
-    # Set HTTP Response Code
-    http_response_code($this->getStatusCode());
-
     # Log the exception
     $this->getLogger()->critical(
       $exception->getMessage().' in file '.$exception->getFile().' on line '.$exception->getLine(),
       $exception->getTrace()
     );
+
+    # Output a response
+    $this->getResponse()->send();
   }
 
 
