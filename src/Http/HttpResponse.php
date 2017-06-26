@@ -117,7 +117,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
     }
 
     # Send Response Body
-    if ( !empty($this->getBody()) ) echo $this->getBody();
+    if ( strlen($this->getBody()>0 ) echo $this->getBody();
 
     # Results
     return $this;
