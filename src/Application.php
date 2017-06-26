@@ -96,8 +96,10 @@ class Application
 
     # Create a Cache Driver (if specified)
     if ( $this->getConfig()->get('cache.driver') != null ) {
-      $driver = $this->getConfig()->get('cache.driver');
-      $this->cacheManager->createCache( $driver, $this->getConfig()->get('cache.options.'.$driver) ) ;
+      $driver = $this->getConfig()->get('cache.driver') ?? '';
+      if (strlen($driver)>0) {
+        $this->cacheManager->createCache( $driver, $this->getConfig()->get('cache.options.'.$driver) ) ;  
+      }
 
       # Debug log
       $this->getLogger()->debug('Created Cache',['driver'=>$driver]);
