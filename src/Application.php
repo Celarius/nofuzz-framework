@@ -125,7 +125,7 @@ class Application
     $logDriver = $this->getConfig()->get('log.driver','file');
 
     $logDateFormat = $this->getConfig()->get('log.drivers.'.$logDriver.'.line_datetime','Y-m-d H:i:s');
-    $logLineFormat = $this->getConfig()->get('log.drivers.'.$logDriver.'.line_format','%datetime% > %level_name% > %message% %context% %extra%').PHP_EOL;
+    $logLineFormat = $this->getConfig()->get('log.drivers.'.$logDriver.'.line_format','%datetime% > %level_name% > %message% %context% %extra%');
 
     if ( strcasecmp($logDriver,"file")==0 ) {
       $logFilePath = $this->getConfig()->get('log.drivers.'.$logDriver.'.file_path','storage/log');
