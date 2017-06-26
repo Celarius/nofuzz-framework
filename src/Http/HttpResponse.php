@@ -27,9 +27,6 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   /** @var array $cookies */
   protected $cookies = array();
 
-  /** @var string $contentType HTTP Header */
-  protected $contentType = 'application/json';
-
   /** @var string $cacheControl HTTP Cache-Control header */
   protected $cacheControl = 'no-cache';
 
@@ -38,6 +35,9 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
 
   /** @var string $body The POST body as a string */
   protected $body = '';
+
+  /** @var string $filename The filename to output as raw-data */
+  protected $fileBody = '';
 
 
   /** [__construct description] */
@@ -53,10 +53,11 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
     $this->setCookies( array() );
     $this->setStatusCode(200);
     $this->setHeaders( array() );
-    $this->setHeader('Content-Type','application/json; charset=utf8');
+    $this->setHeader('Content-Type', 'application/json; charset=utf8');
     $this->setCacheControl('no-cache');
     $this->setCharSet('utf8');
     $this->setBody('');
+    $this->setFileBody('');
 
     return $this;
   }
@@ -96,11 +97,6 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
     # Set HTTP Response Code
     http_response_code($this->statusCode);
 
-    # Update Content-Type Header
-    if ( empty($this->getHeader('Content-Type')) ) {
-      $this->setHeader('Content-Type', $this->contentType.'; charset='.$this->charSet);
-    }
-
     # Update Cache-Control Header
     if ( empty($this->getHeader('Cache-Control')) ) {
       $this->setHeader('Cache-Control', $this->cacheControl);
@@ -116,8 +112,13 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
       setCookie( $cookie['name'], $cookie['value'], $cookie['expire'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httponly'] );
     }
 
-    # Send Response Body
-    if ( strlen($this->getBody()>0) ) echo $this->getBody();
+    # Send Response Body -- if we have something in the $body param
+    if ( !empty($this->getBody()) ) {
+      echo $this->getBody();
+    } else
+    if ( !empty($this->getFileBody()) ) {
+      readfile($this->getFileBody());
+    }
 
     # Results
     return $this;
@@ -338,6 +339,16 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   }
 
   /**
+   * Gets the value of filename
+   *
+   * @return mixed
+   */
+  public function getFileBody()
+  {
+    return $this->fileBody;
+  }
+
+  /**
    * Gets the value of CharSet
    *
    * @return mixed
@@ -357,6 +368,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   public function setStatusCode(int $code)
   {
     $this->statusCode = $code;
+
     return $this;
   }
 
@@ -366,6 +378,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   public function setStatusText(string $text)
   {
     $this->statusText = $text;
+
     return $this;
   }
 
@@ -375,6 +388,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   public function setHeaders(array $headers)
   {
     $this->headers = $headers;
+
     return $this;
   }
 
@@ -399,7 +413,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
     if (!$found) {
       $this->headers[$header] = $value;
     }
-    # Result
+
     return $this;
   }
 
@@ -409,6 +423,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   public function setBody(string $body='')
   {
     $this->body = $body;
+
     return $this;
   }
 
@@ -417,8 +432,30 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
    */
   public function setJsonBody(array $data)
   {
-    $this->setBody( json_encode($data,JSON_PRETTY_PRINT) )
-         ->setContentType('application/json');
+    $this->setContentType('application/json')
+         ->setBody( json_encode($data,JSON_PRETTY_PRINT) );
+
+    return $this;
+  }
+
+  /**
+   * Set a file as the response, with optional content-type
+   *
+   * @param string $fileBody        [description]
+   * @param string $contentType     [description]
+   */
+  public function setFileBody(string $fileBody, string $contentType='')
+  {
+    # Clear the normal body
+    $this->setBody('');
+
+    # Set content type
+    if (!empty($contentType)) {
+      $this->setContentType($contentType);
+    }
+
+    # Set the filename
+    $this->fileBody = $fileBody;
 
     return $this;
   }
@@ -444,7 +481,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
    */
   public function setContentType(string $value)
   {
-    $this->contentType = $value;
+    $this->setHeader('Content-Type', $value);
 
     return $this;
   }
