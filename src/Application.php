@@ -88,6 +88,7 @@ class Application
 
     # HTTP Response
     $this->response = (new \Nofuzz\Http\HttpResponse())->setStatusCode(0);
+    $this->response->setStatusCode(0);
 
     #
     # Initialzie CacheManager & Cache
@@ -98,7 +99,7 @@ class Application
     if ( $this->getConfig()->get('cache.driver') != null ) {
       $driver = $this->getConfig()->get('cache.driver') ?? '';
       if (strlen($driver)>0) {
-        $this->cacheManager->createCache( $driver, $this->getConfig()->get('cache.options.'.$driver) ) ;  
+        $this->cacheManager->createCache( $driver, $this->getConfig()->get('cache.options.'.$driver) ) ;
       }
 
       # Debug log
@@ -284,6 +285,7 @@ class Application
     # Get Method and URI
     $httpMethod = $this->getRequest()->getMethod();
     $path = $this->getRequest()->getUri()->getPath();
+    $routeInfo = null;
 
     # Find route match in groups
     foreach ($this->getRouteGroups() as $routeGroup)
@@ -387,11 +389,16 @@ class Application
         return $routeResult;
 
       } else {
-        # No route matched the URI, we'll look in the next group or exit the foreach()
-
-        # Debug log
-        $this->getLogger()->debug('No route matched request',['rid'=>app('requestId'),'method'=>$httpMethod,'path'=>$path]);
+        # No route matched the URI in this group, we'll look in the next group or exit the foreach()
+        $routeInfo = null;
       }
+
+    }
+
+    # Output debug info
+    if (is_null($routeInfo)) {
+      # Debug log
+      $this->getLogger()->debug('No route matched request',['rid'=>app('requestId'),'method'=>$httpMethod,'path'=>$path]);
     }
 
     return false; // default response
