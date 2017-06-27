@@ -49,10 +49,10 @@ _The reason this is a JSON file is that 3rd party applications/installers etc. c
 | Param | Type | Description |
 |:------|:-----|:------------|
 | methods | `string` or `array` | Defines the methods this route will match. Defaults is "" which matches ALL methods. An array may be specific with the matching methods: `"methods":["GET","POST"]`. The same can be done with a comma separated list: `"methods":"GET,POST"`. Both methods are equal |
-| path | `string` | The matching path. Example `"path":"/api/v1/status"` |
+| path | `string` | The matching path. Examples `"path":"/api/v1/status[/{par1}]"` |
 | handler | `string` | The handling Controller class, with full namespace. Optionally a `@` can be specified to indicate the method to jump to. By default `handleGET()`, `handlePOST()` etc. methods are called based on the request method. |
 
-**Route Example**
+**routes.json Example**
 ```txt
 { 
     "groups": [
@@ -69,7 +69,7 @@ _The reason this is a JSON file is that 3rd party applications/installers etc. c
         },
         {
             "methods": "GET",
-            "path": "/status",
+            "path": "/status[/{par1}]",
             "handler": "\\App\\Controllers\\StatusController@handleStatus"
         }
       ],
@@ -80,9 +80,37 @@ _The reason this is a JSON file is that 3rd party applications/installers etc. c
 
 
 # Controllers
-Controllers are the classes that routes lead to. When defining a route to a Controller mapping the full Namespaced Classname of the Controller is given. Optionally a method name can be given. For each element in `Routes` there are is a "methods", "path" and "handler".
+Controllers are what routes lead to. When defining a route to a Controller mapping the full Namespaced Classname of the Controller is given. Optionally a method name can be given. For each element in `Routes` there are is a "methods", "path" and "handler".
 
-Before the specified method in the Controller is called, a special `initialize()` method gets called, so generic initiaization can be done.
+Before the specified method in the Controller is called, an init method `initialize()` is called, so generic initiaization can be done.
+
+## Reading parameters
+Parameters sent to Controllers can be: Path parameters, Query parameters or a Body parameter.
+
+### Path parameters
+A path parameter is given on the path in the URL. These parameters are passed to the handler function as the `$args` array.
+
+The example `/status[/{par1}]` above is accessed as:
+```php
+  $par1 = $args['par1'] ?? null;
+```
+
+### Query parameters
+A Query parameter is given on the URL after a `?`, consisting of a name and a value. 
+
+Extracting a Query param named `search`:
+```php
+  $queryParam = queryParam('search') ?? '';
+```
+
+### Post parameters
+A Post parameter is given  in the Body of the request, consisting of a name and a value. Post parameters are only available if the post is a multipart-form post.
+
+Extracting a Post param named `search`:
+```php
+  $queryParam = postParam('search') ?? '';
+```
+
 
 ## Generating responses
 To generate responses in controller the following functions are available in httpResponse:
