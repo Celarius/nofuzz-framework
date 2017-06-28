@@ -18,7 +18,7 @@ To start with Nofuzz a few core concepts need to be understood. These very basic
 Nofuzz is not a standalone application but rather a framework that enables rapid development of REST API's. Therefore just cloning the framework does not get you an application, instead take a look at [Nofuzz-Tutorial-Blog](https://github.com/Celarius/nofuzz-tutorial-blog-api) for a sample application using Nofuzz.
 
 ## Order of loaded files
-When a request comes to the Napplication, the following files are loaded:
+When a request comes to the application, the following files are loaded:
 ```txt
 /public/bootstrap.php     Loaded by PHP engine when request comes
 /Nofuzz/Application.php   by bootstrap.php | Nofuzz application init
