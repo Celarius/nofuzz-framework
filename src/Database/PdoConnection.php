@@ -395,4 +395,87 @@ abstract class PdoConnection extends \PDO implements \Nofuzz\Database\PdoConnect
 
     return $this;
   }
+
+  /**
+   * Execute a SELECT statement
+   *
+   * @param  string $sql          SQL statement to execute (SELECT ...)
+   * @param  array  $params       Bind params
+   * @return array                Array with fetched rows
+   */
+  public function rawQuery(string $sql, array $params=[])
+  {
+    $rows = [];
+
+    # Sanity check
+    if (empty($sql)) {
+      return $rows;
+    }
+
+    # Obtain transaction, unelss already in a transaction
+    $autoCommit = $this->beginTransaction();
+
+    # Prepare
+    if ($sth = $this->prepare($sql)) {
+
+      # Binds
+      foreach ($params as $bind=>$value) {
+        $sth->bindValue( ':'.ltrim($bind,':'), $value);
+      }
+
+      # Execute statement
+      if ($sth->execute()) {
+        $rows = $sth->fetchAll(\PDO::FETCH_ASSOC);
+      }
+
+      # Close the cursor
+      $sth->closeCursor();
+    }
+
+    # If we had a loacl transaction, commit it
+    if ($autoCommit) $this->commit();
+
+    return $rows;
+  }
+
+  /**
+   * Execute an INSERT, UPDATE or DELETE statement
+   *
+   * @param  string $sql          SQL statement to execute (INSERT, UPDATE, DELETE ...)
+   * @param  array  $params       Bind params
+   * @return bool                 True if rows affected > 0
+   */
+  public function rawExec(string $sql, array $params=[])
+  {
+    $result = false;
+
+    # Sanity check
+    if (empty($sql)) {
+      return $result;
+    }
+
+    # Obtain transaction, unelss already in a transaction
+    $autoCommit = $this->beginTransaction();
+
+    # Prepare
+    if ($sth = $this->prepare($sql)) {
+      # Binds
+      foreach ($params as $bind=>$value) {
+        $sth->bindValue( ':'.ltrim($bind,':'), $value);
+      }
+
+      # Execute statement
+      if ($sth->execute()) {
+        $result = $this->rowCount() > 0;
+      }
+
+      # Close cursor
+      $sth->closeCursor();
+    }
+
+    # If we had a loacl transaction, commit it
+    if ($autoCommit) $this->commit();
+
+    return $result;
+  }
 }

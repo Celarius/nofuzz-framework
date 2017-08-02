@@ -95,37 +95,7 @@ abstract class AbstractBaseDao implements \Nofuzz\Database\AbstractBaseDaoInterf
    */
   public function rawQuery(string $sql, array $params=[])
   {
-    $rows = [];
-
-    # Sanity check
-    if (empty($sql)) {
-      return $rows;
-    }
-
-    # Obtain transaction, unelss already in a transaction
-    $autoCommit = $this->beginTransaction();
-
-    # Prepare
-    if ($sth = $this->db()->prepare($sql)) {
-
-      # Binds
-      foreach ($params as $bind=>$value) {
-        $sth->bindValue( ':'.ltrim($bind,':'), $value);
-      }
-
-      # Execute statement
-      if ($sth->execute()) {
-        $rows = $sth->fetchAll(\PDO::FETCH_ASSOC);
-      }
-
-      # Close the cursor
-      $sth->closeCursor();
-    }
-
-    # If we had a loacl transaction, commit it
-    if ($autoCommit) $this->commit();
-
-    return $rows;
+    return $this->getConnection()->rawQuery($sql, $aprams);
   }
 
   /**
@@ -137,36 +107,7 @@ abstract class AbstractBaseDao implements \Nofuzz\Database\AbstractBaseDaoInterf
    */
   public function rawExec(string $sql, array $params=[])
   {
-    $result = false;
-
-    # Sanity check
-    if (empty($sql)) {
-      return $result;
-    }
-
-    # Obtain transaction, unelss already in a transaction
-    $autoCommit = $this->beginTransaction();
-
-    # Prepare
-    if ($sth = $this->db()->prepare($sql)) {
-      # Binds
-      foreach ($params as $bind=>$value) {
-        $sth->bindValue( ':'.ltrim($bind,':'), $value);
-      }
-
-      # Execute statement
-      if ($sth->execute()) {
-        $result = $this->db()->rowCount() > 0;
-      }
-
-      # Close cursor
-      $sth->closeCursor();
-    }
-
-    # If we had a loacl transaction, commit it
-    if ($autoCommit) $this->commit();
-
-    return $result;
+    return $this->getConnection()->rawExec($sql, $aprams);
   }
 
 }
