@@ -40,6 +40,7 @@ abstract class AbstractBaseDao implements \Nofuzz\Database\AbstractBaseDaoInterf
    * Get the DB connection assinged to this DAO object
    *
    * @return null|\Nofuzz\Database\PdoConnectionInterface
+   * @deprecated 0.5.6 Removed in version 0.5.6
    */
   public function db()
   {
@@ -90,7 +91,7 @@ abstract class AbstractBaseDao implements \Nofuzz\Database\AbstractBaseDaoInterf
    *
    * @param  string $sql          SQL statement to execute (SELECT ...)
    * @param  array  $params       Bind params
-   * @return array                Array with fetched rows         
+   * @return array                Array with fetched rows
    */
   public function rawQuery(string $sql, array $params=[])
   {
@@ -167,5 +168,5 @@ abstract class AbstractBaseDao implements \Nofuzz\Database\AbstractBaseDaoInterf
 
     return $result;
   }
-  
+
 }
