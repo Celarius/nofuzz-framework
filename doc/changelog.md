@@ -1,8 +1,11 @@
 # Changelog
 See [Roadmap](roadmap.md) for details on whats in the pipe
 
+# v0.5.5
+* Moved rawQuery() and rawExec() to PDOConnection.php
+* Deprecated db() in AbstractBaseDao.php
+
 # v0.5.4
-Status: In Dev
 * Added CockroachDb Database Driver
 * Added PostgreSql Database Driver
 * Moved Route Loading to application->run(), to better catch errors in routes.json
