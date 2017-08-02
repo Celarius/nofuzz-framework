@@ -95,7 +95,7 @@ abstract class AbstractBaseDao implements \Nofuzz\Database\AbstractBaseDaoInterf
    */
   public function rawQuery(string $sql, array $params=[])
   {
-    return $this->getConnection()->rawQuery($sql, $aprams);
+    return $this->getConnection()->rawQuery($sql, $params);
   }
 
   /**
@@ -107,7 +107,7 @@ abstract class AbstractBaseDao implements \Nofuzz\Database\AbstractBaseDaoInterf
    */
   public function rawExec(string $sql, array $params=[])
   {
-    return $this->getConnection()->rawExec($sql, $aprams);
+    return $this->getConnection()->rawExec($sql, $params);
   }
 
 }
