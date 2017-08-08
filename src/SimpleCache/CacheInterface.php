@@ -12,7 +12,7 @@ namespace Nofuzz\SimpleCache;
 interface CacheInterface extends \Psr\SimpleCache\CacheInterface
 {
   #
-  # PSR-16 methods
+  # PSR-16 methods :: https://github.com/php-fig/simple-cache/blob/master/src/CacheInterface.php
   #
   // public function get($key, $default = null);
   // public function set($key, $value, $ttl = null);
