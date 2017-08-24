@@ -250,8 +250,9 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   /**
    * Generate an error response, with HTTP status code $code and body $body
    *
-   * @param  int    $code       4xx or 5xx series HTTP status code
-   * @param  string $body       Optional body to send
+   * @param   int    $code       4xx or 5xx series HTTP status code
+   * @param   string $body       Optional body to send
+   * @return  self
    */
   function error(int $code, string $body=''): \Nofuzz\Http\HTTPResponse
   {
@@ -264,11 +265,13 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   /**
    * Generate an Error Response (in JSON)
    *
-   * @param  int    $code       HTTP Code to set
-   * @param  string $message    Message to send
-   * @param  string $details    Details. Optional.
+   * @param   int    $code          HTTP Code to set
+   * @param   string $message       Message to send
+   * @param   string $details       Details. Optional.
+   * @param   int|integer $options  Optional json_encode() options. Defaults to JSON_PRETTY_PRINT to maintain backwards compatibilitiy
+   * @return  self
    */
-  public function errorJson(int $code, string $message, string $details=''): \Nofuzz\Http\HTTPREsponse
+  public function errorJson(int $code, string $message, string $details='', int $options=JSON_PRETTY_PRINT): \Nofuzz\Http\HTTPResponse
   {
     $message = $this->setTextFromCode($code, $message);
 
@@ -280,7 +283,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
     # Set Headers
     $this->setContentType('application/json');
 
-    return $this->error($code,json_encode($data,JSON_PRETTY_PRINT));
+    return $this->error($code,json_encode($data,$options));
   }
 
   #
@@ -428,12 +431,16 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   }
 
   /**
-   * Sets the value of body to a JSON document based on $data
+   * setJsonBody - Encodes array as JSON response
+   *
+   * @param   array       $data     Array to send as JSON
+   * @param   int|integer $options  Optional json_encode() options. Defaults to JSON_PRETTY_PRINT to maintain backwards compatibilitiy
+   * @return  self
    */
-  public function setJsonBody(array $data)
+  public function setJsonBody(array $data, int $options=JSON_PRETTY_PRINT)
   {
     $this->setContentType('application/json')
-         ->setBody( json_encode($data,JSON_PRETTY_PRINT) );
+         ->setBody( json_encode($data,$options) );
 
     return $this;
   }
