@@ -3,6 +3,7 @@
 [![Total Downloads](https://poser.pugx.org/nofuzz/framework/downloads)](https://packagist.org/packages/nofuzz/framework)
 [![License](https://poser.pugx.org/nofuzz/framework/license)](https://packagist.org/packages/nofuzz/framework)
 [![Build Status](https://travis-ci.org/Celarius/nofuzz-framework.svg)](https://travis-ci.org/Celarius/nofuzz-framework)
+[![PHP7 Ready](https://img.shields.io/badge/PHP7-ready-green.svg)](https://packagist.org/packages/nofuzz/framework)
 
 Nofuzz is a nano-framework that enables rapid development of REST API applications in PHP.
 
