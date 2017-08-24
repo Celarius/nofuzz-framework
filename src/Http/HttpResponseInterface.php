@@ -41,5 +41,5 @@ interface HttpResponseInterface
   function success(int $code, string $body=''): \Nofuzz\Http\HTTPResponse;
   function redirect(int $code, string $url): \Nofuzz\Http\HTTPResponse;
   function error(int $code, string $body=''): \Nofuzz\Http\HTTPResponse;
-  function errorJson(int $code, string $message, string $details=''): \Nofuzz\Http\HTTPResponse;
+  function errorJson(int $code, string $message, string $details='', int $options=JSON_PRETTY_PRINT): \Nofuzz\Http\HTTPResponse;
 }
