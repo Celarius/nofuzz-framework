@@ -1,21 +1,27 @@
 **Table of Contents**
 - Getting started
-  - Order of loaded files
+  + Order of loaded files
 - Routes
 - Controllers
-  - Generating responses
+  + Reading parameters
+    + Path parameters
+    + Query parameters
+    + Post parameters
+  + Generating responses
 - Middleware
 - Database connections
 - Global functions
 - Helpers
-- JWT - JSON Web Token Encode/Decode
-- Cipher - Encryption/Decryption
+  + Cipher Helper
+  + Hash Helper
+  + UUID Helper
+  + JWT Helper
 
 ---
 # Getting started
-To start with Nofuzz a few core concepts need to be understood. These very basic core concepts are Routing, Controllers and Middleware.
+To start with Nofuzz a few core concepts need to be understood. These very basic core concepts are Routing, Middleware and Controllers.
 
-Nofuzz is not a standalone application but rather a framework that enables rapid development of REST API's. Therefore just cloning the framework does not get you an application, instead take a look at [Nofuzz-Tutorial-Blog](https://github.com/Celarius/nofuzz-tutorial-blog-api) for a sample application using Nofuzz.
+Nofuzz is not a standalone application but a framework that enables rapid development of REST API services. Therefore just cloning the framework does not get you an application, instead take a look at [Nofuzz-Tutorial-Blog](https://github.com/Celarius/nofuzz-tutorial-blog-api) for a sample application using Nofuzz.
 
 ## Order of loaded files
 When a request comes to the application, the following files are loaded:
@@ -28,7 +34,6 @@ When a request comes to the application, the following files are loaded:
 /app/Controllers/*        The route controller to handle request
 /app/Middleware/*         The route group After Middleware (if any)
 ```
-
 
 # Routing
 Routes are the heart of the application. App developers define the request routes that map to Controllers, with Middlewares before and after. All routes are defined in [routes.json](app/Config/routes.json). 
