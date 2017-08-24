@@ -30,7 +30,7 @@ interface HttpResponseInterface
   function setHeaders(array $headers);
   function setHeader(string $header, string $value);
   function setBody(string $body='');
-  function setJsonBody(array $data, int $options=0);
+  function setJsonBody(array $data, int $options=JSON_PRETTY_PRINT);
   function setFileBody(string $fileBody, string $contentType='');
   function setCacheControl(string $value);
   function setContentType(string $value);
