@@ -13,11 +13,14 @@
   require_once __DIR__ . '/../vendor/autoload.php';
 
   # Create Global Nofuzz $app Variable
-  $app = new \Nofuzz\Application( realpath(__DIR__.'/../') );
+  $app = new \Nofuzz\Application(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
 
   # Load application globals (optional)
-  if (file_exists(__DIR__ . '/../app/globals.php'))
-    require_once __DIR__ . '/../app/globals.php';
+  $file = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'globals.php';
+  if (file_exists($file)) {
+    require_once $file;
+  }
+  unset($file);
 
 ##############################################################################
 
@@ -32,9 +35,11 @@
     }
 
   } catch (Exception $e) {
-    # Handle Any/All Exceptions
+    # Handle Generic Exceptions
+    #
+
+    # Log it
     logger()->critical( $e->getMessage(), ['trace'=>$e->getTraceAsString()] );
-    // error_log( $e->getMessage().PHP_EOL.'trace='.$e->getTraceAsString() );
 
     # Some nice messages
     $msg[] = 'All those moments will be lost in time, like tears in rain. Time to die.  - Blade Runner (1982)';

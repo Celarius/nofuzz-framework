@@ -4,6 +4,7 @@ See [Roadmap](roadmap.md) for details on whats in the pipe
 # v0.5.6
 * Added param to define JSON encoding options on `setJsonBody()` and `errorJson()` methods. Defaults to `JSON_PRETTY_PRINT` to maintain compatibility
 * Bugfix for retry-sleep in Nofuzz\Http\Client
+* Bootstrap.php comments cleanup, small code cleanup
 
 # v0.5.5
 * Moved rawQuery() and rawExec() to PDOConnection.php

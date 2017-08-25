@@ -2,7 +2,7 @@
 /**
  * globals.php
  *
- * Application Global Functions & Variables
+ * User-Defined application globals
  *
  * @package  [Application]
  */
