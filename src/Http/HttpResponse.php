@@ -311,6 +311,16 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   }
 
   /**
+   * Gets all Cookies as array
+   *
+   * @return array
+   */
+  public function getCookies()
+  {
+    return $this->cookies;
+  }
+
+  /**
    * Gets all headers as array
    *
    * @return array
@@ -361,12 +371,11 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
     return $this->charSet;
   }
 
-  #
-  # Setters
-  #
-
   /**
    * Sets the value of statusCode
+   *
+   * @param int $code [description]
+   * @return  self
    */
   public function setStatusCode(int $code)
   {
@@ -377,6 +386,9 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
 
   /**
    * Sets the value of statusText
+   *
+   * @param   string $text [description]
+   * @return  self
    */
   public function setStatusText(string $text)
   {
@@ -387,6 +399,9 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
 
   /**
    * Sets the value of headers
+   *
+   * @param   array $headers [description]
+   * @return  self
    */
   public function setHeaders(array $headers)
   {
@@ -397,11 +412,15 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
 
   /**
    * Sets a header (preserves the case of header keys)
+   *
+   * @param   string $header [description]
+   * @param   string $value  [description]
+   * @return  self
    */
   public function setHeader(string $header, string $value)
   {
     $found = false;
-    # Teaverse the headers, searching for a matching header (case insensitive)
+    # Traverse the headers, searching for a matching header (case insensitive)
     foreach ( $this->headers as $idx => $oldValue )
     {
       if (strcasecmp($this->headers[$idx],$header)==0)
@@ -422,6 +441,9 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
 
   /**
    * Sets the value of body
+   *
+   * @param   string $body [description]
+   * @return  self
    */
   public function setBody(string $body='')
   {
@@ -448,8 +470,9 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   /**
    * Set a file as the response, with optional content-type
    *
-   * @param string $fileBody        [description]
-   * @param string $contentType     [description]
+   * @param   string $fileBody        [description]
+   * @param   string $contentType     [description]
+   * @return  self
    */
   public function setFileBody(string $fileBody, string $contentType='')
   {
@@ -467,24 +490,37 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
     return $this;
   }
 
-  /** Sets the value of CharSet */
+  /**
+   * Sets the value of CharSet
+   *
+   * @param   string $charSet [description]
+   * @return  self
+   */
   public function setCharSet(string $charSet)
   {
     $this->charSet = $charSet;
+
     return $this;
   }
 
   /**
    * Set header Cache-Control
+   *
+   * @param   string $value [description]
+   * @return  self
    */
   public function setCacheControl(string $value)
   {
     $this->cacheControl = $value;
+
     return $this;
   }
 
   /**
    * Set header Content-Type
+   *
+   * @param   string $value [description]
+   * @return  self
    */
   public function setContentType(string $value)
   {
@@ -496,7 +532,8 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   /**
    * Set Cookies array
    *
-   * @param array $cookieArray [description]
+   * @param   array $cookieArray [description]
+   * @return  self
    */
   public function setCookies(array $cookieArray)
   {
@@ -508,13 +545,14 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   /**
    * Sets a Cookie in the Response
    *
-   * @param string       $name     [description]
-   * @param string       $value    [description]
-   * @param int|integer  $expire   [description]
-   * @param string       $path     [description]
-   * @param string       $domain   [description]
-   * @param bool|boolean $secure   [description]
-   * @param bool|boolean $httponly [description]
+   * @param   string       $name     [description]
+   * @param   string       $value    [description]
+   * @param   int|integer  $expire   [description]
+   * @param   string       $path     [description]
+   * @param   string       $domain   [description]
+   * @param   bool|boolean $secure   [description]
+   * @param   bool|boolean $httponly [description]
+   * @return  self
    */
   public function setCookie(string $name, string $value='', int $expire=0, string $path='', string $domain='', bool $secure=false, bool $httponly=false)
   {

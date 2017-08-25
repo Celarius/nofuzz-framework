@@ -128,7 +128,7 @@ function errorJson(int $code, string $message, string $details=''): \Nofuzz\Http
 
 function setBody(string $body='');
 function setJsonBody(array $data);
-function setFileBody(string $filename);
+function setFileBody(string $filename, string $contentType='');
 ```
 
 # Middleware

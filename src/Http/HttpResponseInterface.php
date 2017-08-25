@@ -19,7 +19,8 @@ interface HttpResponseInterface
   # Getters
   function getStatusCode(): int;
   function getStatusText(): string;
-  function getHeaders();
+  function getCookies()
+  function getHeaders()
   function getHeader(string $header, string $default=''): string;
   function getBody();
   function getFileBody(): string;
