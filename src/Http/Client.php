@@ -145,7 +145,6 @@ class Client // extends ... implements ...
          ],$opts
         );
 
-
         # Send the Request
         $this->httpResponse = $this->guzzleClient->send($request, $sendOpts);
 
@@ -156,7 +155,7 @@ class Client // extends ... implements ...
         # Network errors
         #
         # Note: For "Host not found", "DNS failure", "Network errors" etc.
-        #       we might not have no Response Object!
+        #       we might not have a Response Object!
 
         # Set error String
         $this->lastErrorStr = $e->getMessage();
@@ -201,12 +200,15 @@ class Client // extends ... implements ...
 
         # Should we do a retry?
         if ($retriesLeft>0) {
-          $_seco = 0.1; // 0.1 seconds = 100 ms
+          $_sec = 0.1; // 0.1 seconds = 100 ms
           usleep($_sec * 1000000);
           unset($_sec);
         }
 
       } catch (\Exception $e) {
+        # General exception
+        #
+
         # Set error String
         $this->lastErrorStr = $e->getMessage();
 
@@ -218,7 +220,7 @@ class Client // extends ... implements ...
 
       }
 
-    }
+    } // while
 
     return $this->httpResponse;
   }
