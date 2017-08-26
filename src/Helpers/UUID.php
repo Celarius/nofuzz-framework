@@ -1,10 +1,12 @@
 <?php
 /**
- * UUID Generator
+ * Nofuzz\Helpers\UUID
  *
  *   Generates a v4 UUID
- *
- *   $uuid = \\Nofuzz\\Helpers\\UUID::generate();
+ *   
+ * Exmaple:
+ *   $uuidv4 = \\Nofuzz\\Helpers\\UUID::generate();                  // v4 UUID
+ *   $uuidv5 = \\Nofuzz\\Helpers\\UUID::v5($uuidv4,'My v5 UUID');    // v5 UUID
  *
  * @package  Nofuzz
  */
@@ -77,23 +79,19 @@ class UUID implements \Nofuzz\Helpers\UUIDInterface
     // Calculate hash value
     $hash = sha1($nstr . $name);
 
-    return sprintf('%08s-%04s-%04x-%04x-%12s',
-
+    return 
+      sprintf('%08s-%04s-%04x-%04x-%12s',
       // 32 bits for "time_low"
       substr($hash, 0, 8),
-
       // 16 bits for "time_mid"
       substr($hash, 8, 4),
-
       // 16 bits for "time_hi_and_version",
       // four most significant bits holds version number 5
       (hexdec(substr($hash, 12, 4)) & 0x0fff) | 0x5000,
-
       // 16 bits, 8 bits for "clk_seq_hi_res",
       // 8 bits for "clk_seq_low",
       // two most significant bits holds zero and one for variant DCE1.1
       (hexdec(substr($hash, 16, 4)) & 0x3fff) | 0x8000,
-
       // 48 bits for "node"
       substr($hash, 20, 12)
     );
