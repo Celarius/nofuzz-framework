@@ -1,6 +1,6 @@
 <?php
 /**
- * JWT Helper INterface
+ * Nofuzz\Helpers\JWTInterface
  *
  * @package  Nofuzz
  */

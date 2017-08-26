@@ -1,5 +1,7 @@
 <?php
 /**
+ * Nofuzz\Helpers\JWT
+ *  
  * JSON Web Token Class
  *
  * @link     https://github.com/firebase/php-jwt
