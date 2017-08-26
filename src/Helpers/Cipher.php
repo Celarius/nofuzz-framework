@@ -1,11 +1,12 @@
 <?php
 /**
- * OpenSSL Cipher Helper
- *
- *   Wraps the OpenSSL encrypt() and decrypt() methods into easily usable helper methods
- *
+ * Nofuzz\Helpers\Cipher
+ * 
+ *   Wraps the OpenSSL encrypt() and decrypt() methods into easily usable static helper methods
+ *   Note: Uses the Configuration setting "application.secret" as the default password.
+ *   
+ * Example:
  *   $encryptedValue = \Nofuzz\Helpers\Cipher::encrypt( $plain );
- *
  *   $plain = \Nofuzz\Helpers\Cipher::decrypt( $encryptedValue );
  *
  * @package  Nofuzz
@@ -19,13 +20,13 @@ class Cipher implements \Nofuzz\Helpers\CipherInterface
   /**
    * Encrypt $data with $secret
    *
-   * @param  string $data      [description]
-   * @param  string $iv        [description]
-   * @param  string $secret    [description]
-   * @param  string $algorithm [description]
-   * @return [type]            [description]
+   * @param  string $data        [description]
+   * @param  string $iv          [description]
+   * @param  string $secret      [description]
+   * @param  string $algorithm   [description]
+   * @return string              Base64 Encoded String
    */
-  public static function encrypt(string $data, string $secret, string $algorithm='AES-256-CBC')
+  public static function encrypt(string $data, string $secret='', string $algorithm='AES-256-CBC')
   {
     # If AES we will add a random 16 byte IV before the encrypted data
     if ( strtoupper(substr($algorithm,0,3))==='AES' ) {
@@ -54,7 +55,7 @@ class Cipher implements \Nofuzz\Helpers\CipherInterface
    * @param  string $algorithm [description]
    * @return [type]            [description]
    */
-  public static function decrypt(string $data, string $secret, string $algorithm='AES-256-CBC')
+  public static function decrypt(string $data, string $secret='', string $algorithm='AES-256-CBC')
   {
     # if AES we extract the 16 bytes in the beginning as the IV
     if ( strtoupper(substr($algorithm,0,3))==='AES' ) {
