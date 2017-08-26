@@ -1,6 +1,6 @@
 <?php
 /**
- * UUID Helper Interface
+ * Nofuzz\Helpers\UUIDInterface
  *
  * @package  Nofuzz
  */
