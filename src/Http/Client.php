@@ -4,15 +4,15 @@
  *
  * Generic HTTP Client that has some quick helper funcs for quick GET,POST,PUT etc.
  *
- * Example:
+ * GET Example:
  *
- *    if ($httpClient->get('http://<domain>/<path>;;')) {
+ *    if ($httpClient->get('http://<domain>/<path>')) {
  *      $responseBody = $httpClient->getResponse()->getBody();
  *    } else {
  *      // error
  *    }
  *
- * @package   [Nofuzz]
+ * @package   Nofuzz
  */
 #################################################################################################################################
 

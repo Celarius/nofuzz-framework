@@ -1,8 +1,8 @@
 <?php
 /**
- * HTTPResponse class
+ * Nofuzz\Http\HTTPResponseInterface
  *
- * Represents a HTTP Response
+ * Represents a HTTP Response (sent back to clients)
  *
  * @package     Nofuzz
  */

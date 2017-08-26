@@ -1,8 +1,8 @@
 <?php
 /**
- * HTTPRequest class
+ * Nofuzz\Http\HTTPRequest
  *
- * Represents a HTTP Request
+ * Represents a HTTP Request (Server request)
  *
  * @package     Nofuzz
  */

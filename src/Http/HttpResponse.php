@@ -1,8 +1,8 @@
 <?php
 /**
- * HTTPResponse class
+ * Nofuzz\Http\HTTPResponse
  *
- * Represents a HTTP Response
+ * Represents a HTTP Response (sent back to clients)
  *
  * @package     Nofuzz
  */
@@ -40,14 +40,18 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
   protected $fileBody = '';
 
 
-  /** [__construct description] */
+  /** Constructor */
   public function __construct()
   {
     # Clear our properties
     $this->clear();
   }
 
-  /** Clear properties */
+  /**
+   * clear - Clear all properties
+   * 
+   * @return self
+   */
   public function clear()
   {
     $this->setCookies( array() );
@@ -67,6 +71,8 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
    *
    * @param boolean $active   True for activating compression
    * @param int $level        Compression level. -1=Auto, 0=None, 9=Max
+   * 
+   * @return self
    */
   public function setCompression(bool $active = true, int $level = -1)
   {
@@ -91,6 +97,8 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
 
   /**
    * Send response to client
+   * 
+   * @return self
    */
   public function send()
   {
@@ -214,6 +222,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
 
       default: $this->statusText = '(Unused)'; break;
     }
+    
     # Return the text
     return $this->statusText;
   }
@@ -223,6 +232,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
    *
    * @param  int    $code       2xx series HTTP status code
    * @param  string $body       Optional body to send
+   * @return self
    */
   function success(int $code, string $body=''): \Nofuzz\Http\HTTPResponse
   {
@@ -237,6 +247,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
    *
    * @param  int    $code       3xx series HTTP status code
    * @param  string $url        URL to redirect to ("Location:" header)
+   * @return self
    */
   function redirect(int $code, string $url): \Nofuzz\Http\HTTPResponse
   {
