@@ -1,6 +1,6 @@
 <?php
 /**
- * Hash Helper Interface
+ * Nofuzz\Helpers\HashInterface
  *
  * @package  Nofuzz
  */
@@ -35,5 +35,4 @@ interface HashInterface
    * @return array
    */
   public static function getMethods(): array;
-
 }

@@ -1,9 +1,10 @@
 <?php
 /**
- * OpenSSL Hash Helper
+ * Nofuzz\Helpers\Hash
  *
- *   Wraps the OpenSSL digest() method into easily usable helper method
+ *   OpenSSL Hash Helper. Wraps the OpenSSL digest() method into easily usable helper method
  *
+ * Example:
  *   $digest = \Nofuzz\Helpers\Hash::generate('This is the data','SHA256');
  *
  * @package  Nofuzz
