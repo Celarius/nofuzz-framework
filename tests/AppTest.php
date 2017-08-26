@@ -8,6 +8,7 @@ class AppTest extends \PHPUnit\Framework\TestCase
 
   public function testAppCreate()
   {
+    # Create Nofuzz application
     $this->app = new \Nofuzz\Application( realpath(__DIR__) );
 
     $this->assertSame($this->app->getBasePath(), realpath(__DIR__));

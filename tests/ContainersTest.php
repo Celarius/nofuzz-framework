@@ -2,7 +2,9 @@
 
 namespace Nofuzz;
 
-/** ContainerTestClass */
+/** 
+ * ContainerTestClass class
+ */
 class ContainerTestClass
 {
   protected $property = '';
@@ -18,6 +20,9 @@ class ContainerTestClass
   }
 }
 
+/**
+ * ContainersTest class
+ */
 class ContainersTest extends \PHPUnit\Framework\TestCase
 {
   protected $app;
@@ -71,7 +76,6 @@ class ContainersTest extends \PHPUnit\Framework\TestCase
 
     $this->assertEquals($a->getProperty(), $b->getProperty());
   }
-
 
   /** Test Container Callable */
   public function testContainerCallable()
