@@ -46,7 +46,7 @@ class Config implements \Nofuzz\Config\ConfigInterface
    */
   public function load(string $filename): \Nofuzz\Config\Config
   {
-    # Attempt to load config file and merge it - Current Directory (config.json)
+    # Attempt to load config file
     if ( file_exists($filename) ) {
       # Set filename
       $this->filename = $filename;
@@ -73,7 +73,7 @@ class Config implements \Nofuzz\Config\ConfigInterface
    */
   public function loadAndMerge(string $filename): \Nofuzz\Config\Config
   {
-    # Attempt to load config file and merge it - Current Directory (config.json)
+    # Attempt to load config file
     if ( file_exists($filename) ) {
       # Set filename
       $this->filename = $filename;
