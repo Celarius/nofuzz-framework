@@ -2,11 +2,11 @@
 See [Roadmap](roadmap.md) for details on whats in the pipe
 
 # v0.5.7
-Breaking changes in 0.5.7:
-* New: Config file loaded based on "ENVIRONMENT" variable. This env-var can be set in Apache VHOST/.htaccess. Defaults to `dev` environment
-* New: Config param `application.environment` deprecated, and is now read from the environment variable `ENVIRONMENT`
+*Breaking changes:*
+* New: Config file loaded based on env var `ENVIRONMENT`. This env var can be set in Apache VHOST/.htaccess. Defaults to `dev`
+* New: Config param `application.environment` deprecated, and is now read from the env var `ENVIRONMENT`
 
-Non-breaking changes:
+*Non-breaking changes:*
 * Added a sample `app/Config/config-dev.json` file to the framework
 
 

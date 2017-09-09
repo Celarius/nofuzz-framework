@@ -67,7 +67,7 @@ class Application
     $this->code = $this->getConfig()->get('application.code','');
     $this->name = $this->getConfig()->get('application.name','');
     $this->version = $this->getConfig()->get('application.version');
-    $this->environment = ( env('ENVIRONMENT') ?? $this->getConfig()->get('application.global.environment') ?? 'DEV' );
+    $this->environment = ( env('ENVIRONMENT') ?? $this->getConfig()->get('application.global.environment') ?? 'dev' );
 
     # Create Logger
     $this->createLogger( $this->code );
