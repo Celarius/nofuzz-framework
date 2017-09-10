@@ -20,7 +20,7 @@ class Apcu implements \Nofuzz\SimpleCache\CacheInterface
          ( ini_get('apc.enabled') != '1' ) )
     {
       // APCu is NOT enabled/loaded
-      throw new \Nofuzz\SimpleCache\CacheException('APCu extension not available');
+      // throw new \Nofuzz\SimpleCache\CacheException('APCu extension not available');
     }
 
   }

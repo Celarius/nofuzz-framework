@@ -8,6 +8,7 @@
 
 namespace Nofuzz\SimpleCache;
 
-class CacheException extends \RuntimeException
+class CacheException extends \Exception
 {
+
 }

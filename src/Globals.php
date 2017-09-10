@@ -99,6 +99,7 @@ if (!function_exists('logger')) {
   function logger()
   {
     global $app;
+
     return $app->getLogger();
   }
 }
@@ -112,6 +113,7 @@ if (!function_exists('db')) {
   function db(string $connectionName='')
   {
     global $app;
+
     return $app->getConnectionManager()->getConnection($connectionName);
   }
 }
@@ -125,6 +127,7 @@ if (!function_exists('cache')) {
   function cache(string $driverName='')
   {
     global $app;
+
     return $app->getCache($driverName);
   }
 }
@@ -138,6 +141,7 @@ if (!function_exists('request')) {
   function request()
   {
     global $app;
+
     return $app->getRequest();
   }
 }
@@ -153,6 +157,7 @@ if (!function_exists('queryParam')) {
   function queryParam(string $paramName, $default=null)
   {
     global $app;
+
     return $app->getRequest()->getQueryParams()[$paramName] ?? $default;
   }
 }
@@ -180,6 +185,7 @@ if (!function_exists('postParam')) {
   function postParam(string $paramName, $default=null)
   {
     global $app;
+
     return $app->getRequest()->getParsedBody()[$paramName] ?? $default;
   }
 }
@@ -195,6 +201,7 @@ if (!function_exists('cookieParam')) {
   function cookieParam(string $paramName, $default=null)
   {
     global $app;
+
     return $app->getRequest()->getCookieParams()[$paramName] ?? $default;
   }
 }
@@ -208,6 +215,7 @@ if (!function_exists('response')) {
   function response()
   {
     global $app;
+
     return $app->getResponse();
   }
 }
