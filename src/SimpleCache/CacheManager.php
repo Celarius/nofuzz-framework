@@ -6,6 +6,8 @@
  * and getCache($driver) for return an instance of a specific cache driver.
  *
  * PSR-16 compatible (SimpleCache)
+ *
+ * @package Nofuzz
  */
 #################################################################################################################################
 

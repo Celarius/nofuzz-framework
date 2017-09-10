@@ -1,9 +1,9 @@
 <?php
 /**
  * APCu Cache Driver
- *
- * "predis/predis": "^1.1"
- */
+  *
+ * @package Nofuzz
+*/
 #################################################################################################################################
 
 namespace Nofuzz\SimpleCache\Drivers;

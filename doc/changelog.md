@@ -12,6 +12,7 @@ See [Roadmap](roadmap.md) for details on whats in the pipe
 * Added JSON_NUMERIC_CHECK to default options for `HTTPResponse->errorJson()` and `HTTPResponse->setJsonBody()`
 * Changed `HTTPResponse->errorJson()` to use `HTTPResponse->setJsonBody()` when finally setting the body
 * Changed request decoding to use Guzzles `ServerRequest::fromGlobals()`. Guzzle bug now fixed
+* Updated documentation to SimpleCache/* files
 
 # v0.5.6
 * Added param to define JSON encoding options on `setJsonBody()` and `errorJson()` methods. Defaults to `JSON_PRETTY_PRINT` to maintain compatibility
