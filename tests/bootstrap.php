@@ -12,3 +12,6 @@ use PHPUnit\Framework\TestCase;
 date_default_timezone_set('UTC');
 
 require __DIR__.'/../vendor/autoload.php';
+
+# Create Nofuzz application
+$app = new \Nofuzz\Application( realpath(__DIR__) );

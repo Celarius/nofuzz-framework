@@ -10,8 +10,8 @@ class HelpersTest extends \PHPUnit\Framework\TestCase
   /** Setup test */
   public function setup()
   {
-    # Create NoFuzz application
-    $this->app = new \Nofuzz\Application( realpath(__DIR__) );
+    global $app;
+    $this->app = $app;
 
     # Set a Secret for the testing
     $this->secret = 'There be dragons here';

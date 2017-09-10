@@ -1,9 +1,9 @@
 <?php
 /**
  * APCu Cache Driver
- *
- * "predis/predis": "^1.1"
- */
+  *
+ * @package Nofuzz
+*/
 #################################################################################################################################
 
 namespace Nofuzz\SimpleCache\Drivers;
@@ -20,7 +20,7 @@ class Apcu implements \Nofuzz\SimpleCache\CacheInterface
          ( ini_get('apc.enabled') != '1' ) )
     {
       // APCu is NOT enabled/loaded
-      throw new \Psr\SimpleCache\CacheException('APCu extension not available');
+      // throw new \Nofuzz\SimpleCache\CacheException('APCu extension not available');
     }
 
   }

@@ -2,7 +2,7 @@
 
 namespace Nofuzz;
 
-/** 
+/**
  * ContainerTestClass class
  */
 class ContainerTestClass
@@ -31,7 +31,8 @@ class ContainersTest extends \PHPUnit\Framework\TestCase
   /** Setup test */
   public function setup()
   {
-    $this->app = new \Nofuzz\Application( realpath(__DIR__) );
+    global $app;
+    $this->app = $app;
   }
 
   /** Test Container STRING */

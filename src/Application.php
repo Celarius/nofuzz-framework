@@ -47,7 +47,6 @@ class Application
     #
     require __DIR__ . '/Globals.php';
 
-
     # Set basic properties
     $this->basePath = $basePath;
     $this->routeGroups = array();
@@ -76,21 +75,6 @@ class Application
     # Decode HTTP Request (to a Guzzle ServerRequest)
     $this->request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
 
-    #   ServerRequest::fromGlobals() had a bug in the past, failing to parse the Uri['scheme'] properly
-    #   and this leads to the following workaround code.
-    // $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
-    // $scheme = ( strtolower($_SERVER['HTTPS'] ?? '')==='on' ? 'https' : 'http' );
-    // $uri = \Nofuzz\Http\HttpRequest::getUriFromGlobals()->withScheme($scheme);
-    // $headers = function_exists('getallheaders') ? getallheaders() : [];
-    // $body = new \GuzzleHttp\Psr7\LazyOpenStream('php://input', 'r+');
-    // $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']) : '1.1';
-    //
-    // $this->request = (new \Nofuzz\Http\HttpRequest($method,$uri,$headers,$body,$protocol))
-    //                 ->withCookieParams($_COOKIE)
-    //                 ->withQueryParams($_GET)
-    //                 ->withParsedBody($_POST)
-    //                 ->withUploadedFiles(\Nofuzz\Http\HttpRequest::normalizeFiles($_FILES));
-
     # HTTP Response
     $this->response = (new \Nofuzz\Http\HttpResponse())->setStatusCode(0);
     $this->response->setStatusCode(0);
@@ -104,11 +88,13 @@ class Application
     if ( $this->getConfig()->get('cache.driver') != null ) {
       $driver = $this->getConfig()->get('cache.driver') ?? '';
       if (strlen($driver)>0) {
-        $this->cacheManager->createCache( $driver, $this->getConfig()->get('cache.options.'.$driver) ) ;
+        $driverClass = $this->cacheManager->createCache( $driver, $this->getConfig()->get('cache.options.'.$driver) ) ;
+        if (!is_null($driverClass)) {
+          $this->getLogger()->debug('Failed to create Cache',['driver'=>$driver]);
+        } else {
+          $this->getLogger()->warning('Created Cache',['driver'=>$driver]);
+        }
       }
-
-      # Debug log
-      $this->getLogger()->debug('Created Cache',['driver'=>$driver]);
     }
 
     #
