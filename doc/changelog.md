@@ -1,6 +1,16 @@
 # Changelog
 See [Roadmap](roadmap.md) for details on whats in the pipe
 
+# v0.5.7
+*Breaking changes:*
+* New: Config file loaded based on env var `ENVIRONMENT`. This env var can be set in Apache VHOST/.htaccess. Defaults to `dev`
+* New: Config param `application.environment` deprecated, and is now read from the env var `ENVIRONMENT`
+
+*Non-breaking changes:*
+* Added a sample `app/Config/config-dev.json` file to the framework
+* Added JSON_NUMERIC_CHECK to default options for `HTTPResponse->errorJson()` and `HTTPResponse->setJsonBody()`
+* CHanged `HTTPResponse->errorJson()` to use `HTTPResponse->setJsonBody()` when finally setting the body
+
 # v0.5.6
 * Added param to define JSON encoding options on `setJsonBody()` and `errorJson()` methods. Defaults to `JSON_PRETTY_PRINT` to maintain compatibility
 * Bugfix for retry-sleep in Nofuzz\Http\Client
@@ -23,7 +33,7 @@ See [Roadmap](roadmap.md) for details on whats in the pipe
 * Added Units-Tests for many things (work in progress)
 * PHP 7.1.3 compatibility verified
 * errorHandler() in application.php fixed to not log unwanted data
-* Renamed "BaseDao" to "AbstractBaseDao" and "BaseDBObject" to "AbstractBaseEntity" 
+* Renamed "BaseDao" to "AbstractBaseDao" and "BaseDBObject" to "AbstractBaseEntity"
 * AbstractBaseDao rawQuery() and rawExec() methods added
 
 # v0.5.2

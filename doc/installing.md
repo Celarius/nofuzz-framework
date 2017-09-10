@@ -48,7 +48,7 @@ error_log = "<path>/php/logs/error.log"
 extension=php_mbstring.dll
 extension=php_openssl.dll
 
-; Enable all needed PDO drivers 
+; Enable all needed PDO drivers
 ;extension=php_pdo_firebird.dll
 ;extension=php_pdo_mysql.dll
 
@@ -80,37 +80,43 @@ Include conf/extra/httpd-vhosts.conf
 ```
 
 ### conf/extra/httpd-vhosts.conf
-_Tip: In the VHOST definition you can SET ENVIRONMENT options with `SetEnv <variable> <value>`, and later access these in PHP via `$_ENV[<variable>]` or the helper `env('<variable>')`_
+_Tip: In the VHOST definition you can set environment options with `SetEnv <variable> <value>`, and later access these in PHP via `$_ENV[<variable>]` or the global function `env('<variable>')`_
 
 ```txt
 # Define constants for the application
-Define NF_APP_NAME      "myapp"
 Define NF_APP_DOMAIN    "api.mydomain.com"
+Define NF_APP_CODE      "myapp"
 Define NF_APP_PATH      "/var/www/applications/my_app"
 Define NF_APP_EMAIL     "admin@mydomain.com"
-Define NF_APP_ENV       "DEV"
+Define NF_APP_ENV       "dev"
 
 # VHost definition
 <VirtualHost *:80>
-  ServerName {$NF_APP_DOMAIN}
-  ServerAdmin {$NF_APP_EMAIL}
+  ServerName ${NF_APP_DOMAIN}
+  ServerAdmin ${NF_APP_EMAIL}
   DocumentRoot "${NF_APP_PATH}/src/public"
 
-  ErrorLog "logs/${NF_APP_NAME}-error.log"
-  CustomLog "logs/${NF_APP_NAME}-access.log" common
+  ErrorLog "logs/${NF_APP_CODE}-error.log"
+  CustomLog "logs/${NF_APP_CODE}-access.log" common
 
   <Directory "${NF_APP_PATH}/src/public">
     <IfModule mod_negotiation.c>
         Options -MultiViews
     </IfModule>
+
     SetEnv ENVIRONMENT ${NF_APP_ENV}
-    DirectoryIndex bootstrap.php
+
+    # Try to load files in order of appearance if requeest matches a dir
+    DirectoryIndex bootstrap.php index.html index.htm index.php
+
     Options -Indexes +FollowSymLinks
     AllowOverride All
     Order allow,deny
     Allow from all
     Require all granted
+
     DirectorySlash Off
+
     # Rewrite Engine to direct all requests to bootstrap.php file
     RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-d
@@ -121,7 +127,8 @@ Define NF_APP_ENV       "DEV"
 ```
 
 ### Using .htaccess file
-You can alos use the `.htaccess` file to rewrite requests to the bootstrap file, but this is not recommeded. The biggest reason being performance.
+You can also use the `.htaccess` file to rewrite requests to the bootstrap file, but this is not recommeded.
+The biggest reason being performance.
 
 ```txt
     SetEnv ENVIRONMENT PROD
@@ -134,7 +141,7 @@ You can alos use the `.htaccess` file to rewrite requests to the bootstrap file,
 ```
 
 ## Config options
-The default Config files is located at `/app/config/config.json`
+The default Config files is located at `/app/config/config-${environment}.json`
 Below is an example configuration from the [Nofuzz-Tutorial-Blog](https://github.com/Celarius/nofuzz-tutorial-blog-api) application.
 Values you should change for every application are:
 - Application
@@ -151,7 +158,6 @@ Values you should change for every application are:
         "global": {
             "maintenance": false,
             "message": "We are in maintenance mode, back shortly",
-            "environment": "DEV",
             "timezone": "Europe\/Stockholm"
         },
         "secret": "This Value Needs To Be Changed To Something Random"
@@ -185,7 +191,7 @@ In order to deploy to production do the following:
 2. Configure Apache httpd.conf & vhost.conf
 3. Copy/Clone php application files to target dir
 4. Set environment specific config options in `/app/Config/config.json`
-5. Update Composer & Packages (see below) 
+5. Update Composer & Packages (see below)
 6. Restart Apache
 
 ## Directory Structure
@@ -203,7 +209,7 @@ A basic Nofuzz application has the following structure. The `/app` folder will c
 
 
 ## Composer update
-Run the following composer command to update & generate optimized autoload files: 
+Run the following composer command to update & generate optimized autoload files:
 ```txt
 composer self-update
 composer update --no-dev -o

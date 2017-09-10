@@ -49,7 +49,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
 
   /**
    * clear - Clear all properties
-   * 
+   *
    * @return self
    */
   public function clear()
@@ -71,7 +71,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
    *
    * @param boolean $active   True for activating compression
    * @param int $level        Compression level. -1=Auto, 0=None, 9=Max
-   * 
+   *
    * @return self
    */
   public function setCompression(bool $active = true, int $level = -1)
@@ -97,7 +97,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
 
   /**
    * Send response to client
-   * 
+   *
    * @return self
    */
   public function send()
@@ -222,7 +222,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
 
       default: $this->statusText = '(Unused)'; break;
     }
-    
+
     # Return the text
     return $this->statusText;
   }
@@ -279,10 +279,10 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
    * @param   int    $code          HTTP Code to set
    * @param   string $message       Message to send
    * @param   string $details       Details. Optional.
-   * @param   int|integer $options  Optional json_encode() options. Defaults to JSON_PRETTY_PRINT to maintain backwards compatibilitiy
+   * @param   int|integer $options  Optional json_encode() options. Default = JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK
    * @return  self
    */
-  public function errorJson(int $code, string $message, string $details='', int $options=JSON_PRETTY_PRINT): \Nofuzz\Http\HTTPResponse
+  public function errorJson(int $code, string $message, string $details='', int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK): \Nofuzz\Http\HTTPResponse
   {
     $message = $this->setTextFromCode($code, $message);
 
@@ -291,10 +291,7 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
     $data['message'] = $message;
     if (strlen($details)>0) $data['details'] = $details;
 
-    # Set Headers
-    $this->setContentType('application/json');
-
-    return $this->error($code,json_encode($data,$options));
+    return $this->setJsonBody($data,$options);
   }
 
   #
@@ -467,10 +464,10 @@ class HttpResponse implements \Nofuzz\Http\HttpResponseInterface
    * setJsonBody - Encodes array as JSON response
    *
    * @param   array       $data     Array to send as JSON
-   * @param   int|integer $options  Optional json_encode() options. Defaults to JSON_PRETTY_PRINT to maintain backwards compatibilitiy
+   * @param   int|integer $options  Optional json_encode() options. Default = JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK
    * @return  self
    */
-  public function setJsonBody(array $data, int $options=JSON_PRETTY_PRINT)
+  public function setJsonBody(array $data, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK)
   {
     $this->setContentType('application/json')
          ->setBody( json_encode($data,$options) );

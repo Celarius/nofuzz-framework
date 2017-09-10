@@ -53,7 +53,11 @@ class Application
     $this->routeGroups = array();
 
     # Create Config
-    $this->config = new \Nofuzz\Config\Config($this->basePath.'/app/Config/config.json');
+    # v0.5.7: (KS) Made loading the config based on environment variable
+    $env = strtolower(env('ENVIRONMENT','dev'));
+    $config_file = str_replace('-${environment}', $env, $this->basePath.'/app/Config/config-${environment}.json');
+    # Create the config
+    $this->config = new \Nofuzz\Config\Config($config_file);
 
     # Set Timezone - default to UTC
     $timeZone = $this->getConfig()->get('application.global.timezone','UTC');
@@ -63,7 +67,7 @@ class Application
     $this->code = $this->getConfig()->get('application.code','');
     $this->name = $this->getConfig()->get('application.name','');
     $this->version = $this->getConfig()->get('application.version');
-    $this->environment = ( $this->getConfig()->get('application.global.environment') ?? env('Environment') ?? 'DEV' );
+    $this->environment = ( env('ENVIRONMENT') ?? $this->getConfig()->get('application.global.environment') ?? 'dev' );
 
     # Create Logger
     $this->createLogger( $this->code );

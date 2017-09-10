@@ -31,7 +31,7 @@ interface HttpResponseInterface
   function setHeaders(array $headers);
   function setHeader(string $header, string $value);
   function setBody(string $body='');
-  function setJsonBody(array $data, int $options=JSON_PRETTY_PRINT);
+  function setJsonBody(array $data, int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK);
   function setFileBody(string $fileBody, string $contentType='');
   function setCacheControl(string $value);
   function setContentType(string $value);
@@ -42,5 +42,5 @@ interface HttpResponseInterface
   function success(int $code, string $body=''): \Nofuzz\Http\HTTPResponse;
   function redirect(int $code, string $url): \Nofuzz\Http\HTTPResponse;
   function error(int $code, string $body=''): \Nofuzz\Http\HTTPResponse;
-  function errorJson(int $code, string $message, string $details='', int $options=JSON_PRETTY_PRINT): \Nofuzz\Http\HTTPResponse;
+  function errorJson(int $code, string $message, string $details='', int $options=JSON_PRETTY_PRINT|JSON_NUMERIC_CHECK): \Nofuzz\Http\HTTPResponse;
 }
