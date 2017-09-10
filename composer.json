@@ -24,7 +24,7 @@
     "ext-PDO": "*",
     "ext-mbstring": "*",
     "ext-openssl": "*",
-    "ext-apcu": "*",
+    "ext-apc": "*",
 
     "guzzlehttp/guzzle": "^6.2",
     "nikic/fast-route": "^1.1",
