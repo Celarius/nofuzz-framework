@@ -9,7 +9,7 @@ See [Roadmap](roadmap.md) for details on whats in the pipe
 *Non-breaking changes:*
 * Added a sample `app/Config/config-dev.json` file to the framework
 * Added JSON_NUMERIC_CHECK to default options for `HTTPResponse->errorJson()` and `HTTPResponse->setJsonBody()`
-* CHanged `HTTPResponse->errorJson()` to use `HTTPResponse->setJsonBody()` when finally setting the body
+* Changed `HTTPResponse->errorJson()` to use `HTTPResponse->setJsonBody()` when finally setting the body
 
 # v0.5.6
 * Added param to define JSON encoding options on `setJsonBody()` and `errorJson()` methods. Defaults to `JSON_PRETTY_PRINT` to maintain compatibility

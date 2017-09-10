@@ -10,7 +10,7 @@ namespace Nofuzz;
 
 class Application
 {
-  const NofuzzVersion = '0.5.6';
+  const NofuzzVersion = '0.5.x';
 
   protected $request = null;
   protected $response = null;
