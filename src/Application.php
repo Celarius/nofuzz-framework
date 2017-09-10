@@ -55,7 +55,8 @@ class Application
     # Create Config
     # v0.5.7: (KS) Made loading the config based on environment variable
     $env = strtolower(env('ENVIRONMENT','dev'));
-    $config_file = str_replace('-${environment}', $env, $this->basePath.'/app/Config/config-${environment}.json');
+    $config_file = str_replace('${environment}', $env, $this->basePath.'/app/Config/config-${environment}.json');
+
     # Create the config
     $this->config = new \Nofuzz\Config\Config($config_file);
 
@@ -67,28 +68,28 @@ class Application
     $this->code = $this->getConfig()->get('application.code','');
     $this->name = $this->getConfig()->get('application.name','');
     $this->version = $this->getConfig()->get('application.version');
-    $this->environment = ( env('ENVIRONMENT') ?? $this->getConfig()->get('application.global.environment') ?? 'dev' );
+    $this->environment = strtolower( env('ENVIRONMENT') ?? $this->getConfig()->get('application.global.environment') ?? 'dev' );
 
     # Create Logger
     $this->createLogger( $this->code );
 
     # Decode HTTP Request (to a Guzzle ServerRequest)
-    #   ServerRequest::fromGlobals() has a bug that fails to parse the Uri['scheme'] properly
-    #   and this leads to the following workaround code.
-    $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
-    $scheme = ( strtolower($_SERVER['HTTPS'] ?? '')==='on' ? 'https' : 'http' );
-    $uri = \Nofuzz\Http\HttpRequest::getUriFromGlobals()->withScheme($scheme);
-    $headers = function_exists('getallheaders') ? getallheaders() : [];
-    $body = new \GuzzleHttp\Psr7\LazyOpenStream('php://input', 'r+');
-    $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']) : '1.1';
+    $this->request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
 
-    $this->request = (new \Nofuzz\Http\HttpRequest($method,$uri,$headers,$body,$protocol))
-                    ->withCookieParams($_COOKIE)
-                    ->withQueryParams($_GET)
-                    ->withParsedBody($_POST)
-                    ->withUploadedFiles(\Nofuzz\Http\HttpRequest::normalizeFiles($_FILES));
-    // ** Disabled becuase of guzzle bug
-    // $this->request = \GuzzleHttp\Psr7\ServerRequest::fromGlobals();
+    #   ServerRequest::fromGlobals() had a bug in the past, failing to parse the Uri['scheme'] properly
+    #   and this leads to the following workaround code.
+    // $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
+    // $scheme = ( strtolower($_SERVER['HTTPS'] ?? '')==='on' ? 'https' : 'http' );
+    // $uri = \Nofuzz\Http\HttpRequest::getUriFromGlobals()->withScheme($scheme);
+    // $headers = function_exists('getallheaders') ? getallheaders() : [];
+    // $body = new \GuzzleHttp\Psr7\LazyOpenStream('php://input', 'r+');
+    // $protocol = isset($_SERVER['SERVER_PROTOCOL']) ? str_replace('HTTP/', '', $_SERVER['SERVER_PROTOCOL']) : '1.1';
+    //
+    // $this->request = (new \Nofuzz\Http\HttpRequest($method,$uri,$headers,$body,$protocol))
+    //                 ->withCookieParams($_COOKIE)
+    //                 ->withQueryParams($_GET)
+    //                 ->withParsedBody($_POST)
+    //                 ->withUploadedFiles(\Nofuzz\Http\HttpRequest::normalizeFiles($_FILES));
 
     # HTTP Response
     $this->response = (new \Nofuzz\Http\HttpResponse())->setStatusCode(0);
@@ -109,7 +110,6 @@ class Application
       # Debug log
       $this->getLogger()->debug('Created Cache',['driver'=>$driver]);
     }
-
 
     #
     # DB Manager

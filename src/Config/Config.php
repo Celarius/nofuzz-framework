@@ -59,7 +59,11 @@ class Config implements \Nofuzz\Config\ConfigInterface
         $this->confValues = $configArray;
       } else {
         throw new \RunTimeException('Invalid JSON file "'.$filename.'"');
+
       }
+    } else {
+      throw new \RunTimeException('Config file "'.$filename.'" not found');
+
     }
 
     return $this;
