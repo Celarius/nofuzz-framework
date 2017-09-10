@@ -7,9 +7,11 @@ See [Roadmap](roadmap.md) for details on whats in the pipe
 * New: Config param `application.environment` deprecated, and is now read from the env var `ENVIRONMENT`
 
 *Non-breaking changes:*
+* Added General Runtime Exception on config file not found. Returns 500 to user.
 * Added a sample `app/Config/config-dev.json` file to the framework
 * Added JSON_NUMERIC_CHECK to default options for `HTTPResponse->errorJson()` and `HTTPResponse->setJsonBody()`
 * Changed `HTTPResponse->errorJson()` to use `HTTPResponse->setJsonBody()` when finally setting the body
+* Changed request decoding to use Guzzles `ServerRequest::fromGlobals()`. Guzzle bug now fixed
 
 # v0.5.6
 * Added param to define JSON encoding options on `setJsonBody()` and `errorJson()` methods. Defaults to `JSON_PRETTY_PRINT` to maintain compatibility
