@@ -1,7 +1,7 @@
 # Changelog
 See [Roadmap](roadmap.md) for details on whats in the pipe
 
-# v0.5.7
+# v0.6.x
 *Breaking changes:*
 * New: Config file loaded based on env var `ENVIRONMENT`. This env var can be set in Apache VHOST/.htaccess. Defaults to `dev`
 * New: Config param `application.environment` deprecated, and is now read from the env var `ENVIRONMENT`
