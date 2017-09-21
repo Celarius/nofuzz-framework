@@ -3,7 +3,7 @@ The following features/changes are planned. Please use the version number as Mil
 
 ---
 # v0.6.0
-Status: Not started
+Status: In progress
 
 **Send feedback about what you think is needed**
 
