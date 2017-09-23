@@ -170,7 +170,7 @@ if (!function_exists('queryParams')) {
    */
   function queryParams()
   {
-    return $app->getRequest()->getQueryParams()[$paramName] ?? [];
+    return $app->getRequest()->getQueryParams() ?? [];
   }
 }
 
