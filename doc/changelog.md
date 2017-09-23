@@ -14,6 +14,7 @@ See [Roadmap](roadmap.md) for details on whats in the pipe
 * Changed request decoding to use Guzzles `ServerRequest::fromGlobals()`. Guzzle bug now fixed
 * Updated documentation to SimpleCache/* files
 * Changed Cache initialization to handle situation when driver libs for cache missing
+* Fixed bug in Globals.php, queryParams()
 
 # v0.5.6
 * Added param to define JSON encoding options on `setJsonBody()` and `errorJson()` methods. Defaults to `JSON_PRETTY_PRINT` to maintain compatibility
