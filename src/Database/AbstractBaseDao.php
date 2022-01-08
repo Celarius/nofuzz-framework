@@ -16,7 +16,7 @@ abstract class AbstractBaseDao implements \Nofuzz\Database\AbstractBaseDaoInterf
   /**
    * Constructor
    *
-   * @param \Nofuzz\Database\PdoConnectionInterface $connection
+   * @param string $connectionName
    */
   public function __construct(string $connectionName='')
   {
@@ -27,7 +27,7 @@ abstract class AbstractBaseDao implements \Nofuzz\Database\AbstractBaseDaoInterf
   /**
    * Get the DB connection assinged to this DAO object
    *
-   * @return null|\Nofuzz\Database\PdoConnectionInterface
+   * @return PdoConnectionInterface
    */
   public function getConnection()
   {

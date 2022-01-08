@@ -59,5 +59,4 @@ interface CacheInterface extends \Psr\SimpleCache\CacheInterface
    * @return string
    */
   public function getVersion(): string;
-
 }

@@ -278,7 +278,6 @@ class Application
     }
     $this->loadRoutes( $routesFilename );
 
-
     # Get Method and URI
     $httpMethod = $this->getRequest()->getMethod();
     $path = $this->getRequest()->getUri()->getPath();
@@ -429,6 +428,7 @@ class Application
         # Common Middlewares
         $this->beforeMiddleware = ($routesFile['common']['before'] ?? []);
         $this->afterMiddleware = ($routesFile['common']['after'] ?? []);
+
       } else {
         throw new \RunTimeException('Invalid JSON file "'.$filename.'"');
 
